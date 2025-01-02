@@ -220,61 +220,65 @@ h1 {
 .team-button.active[data-team="A"] {
     background-color: #34d399; /* Verde */
     border: 2px solid #059669; /* Tom mais escuro */
+    color: black;
 }
 
 .team-button.active[data-team="B"] {
     background-color: #60a5fa; /* Azul */
     border: 2px solid #2563eb;
+    color: black;
 }
 
 .team-button.active[data-team="C"] {
-    background-color: #f472b6; /* Rosa */
+    background-color: #d196f3; /* Rosa */
     border: 2px solid #be185d;
+    color: black;
 }
 
 .team-button.active[data-team="D"] {
     background-color: #fb923c; /* Laranja */
     border: 2px solid #ea580c;
+    color: black;
 }
 
 .team-button.active[data-team="E"] {
     background-color: #facc15; /* Amarelo */
     border: 2px solid #ca8a04;
+    color: black;
 }
 
 /* Destaque de turnos no calendário */
 .shift.highlight[data-team="A"] {
     background-color: #34d399;
-    color: white;
+    color: black;
     border-radius: 4px;
     padding: 2px 5px;
 }
 
 .shift.highlight[data-team="B"] {
     background-color: #60a5fa;
-    color: white;
+    color: black;
     border-radius: 4px;
     padding: 2px 5px;
 }
 
 .shift.highlight[data-team="C"] {
     background-color: #d196f3;
-    color: white;
+    color: black;
     border-radius: 4px;
     padding: 2px 5px;
 }
 
 .shift.highlight[data-team="D"] {
     background-color: #fb923c;
-    color: white;
+    color: black;
     border-radius: 4px;
     padding: 2px 5px;
 }
 
 .shift.highlight[data-team="E"] {
     background-color: #facc15;
-    color: white;
+    color: black;
     border-radius: 4px;
     padding: 2px 5px;
 }
-
