@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Escala de Serviço - COPOM</title>
+</head>
+
+<body>
+    <h1>Escala de Serviço das Equipes - COPOM</h1>
+    <div class="calendar-navigation">
+        <button id="prev-month" title="Mês anterior">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-chevron-left">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <span id="current-month"></span>
+
+        <select id="month-select">
+            <option value="0">Janeiro</option>
+            <option value="1">Fevereiro</option>
+            <option value="2">Março</option>
+            <option value="3">Abril</option>
+            <option value="4">Maio</option>
+            <option value="5">Junho</option>
+            <option value="6">Julho</option>
+            <option value="7">Agosto</option>
+            <option value="8">Setembro</option>
+            <option value="9">Outubro</option>
+            <option value="10">Novembro</option>
+            <option value="11">Dezembro</option>
+        </select>
+
+        <select id="year-select">
+            <script>
+                for (let year = 2014; year <= 2050; year++) {
+                    document.write(`<option value="${year}">${year}</option>`);
+                }
+            </script>
+        </select>
+
+        <button id="next-month" title="Próximo mês">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-chevron-right">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+
+        <button id="today-button" title="Ir para hoje">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-calendar">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y1="10"></line>
+            </svg>
+        </button>
+    </div>
+
+    <div class="team-buttons">
+        <button class="team-button" data-team="A">Equipe A</button>
+        <button class="team-button" data-team="B">Equipe B</button>
+        <button class="team-button" data-team="C">Equipe C</button>
+        <button class="team-button" data-team="D">Equipe D</button>
+        <button class="team-button" data-team="E">Equipe E</button>
+    </div>
+
+    <div id="calendar"></div>
+    <div id="statistics" class="statistics-container"></div>
+
+    <script>
+        const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+        const calendarContainer = document.getElementById("calendar");
+        const currentMonthLabel = document.getElementById("current-month");
+        const statisticsContainer = document.getElementById("statistics");
+
+        let currentDate = new Date();
+        const activeTeams = new Set();
+
+        const dayPattern = ["A", "B", "A", "E", "B"];
+        const nightPattern = ["E", "C", "D", "C", "D"];
+
+        const feriados = {
+            nacional: {
+                "01/01": "Ano Novo",
+                "21/04": "Tiradentes",
+                "01/05": "Dia do Trabalho",
+                "07/09": "Independência",
+                "12/10": "Nossa Senhora Aparecida",
+                "02/11": "Finados",
+                "15/11": "Proclamação da República",
+                "20/11": "Consciência Negra",
+                "25/12": "Natal"
+            },
+            estadual: {
+                "09/07": "Revolução Constitucionalista"
+            },
+            municipal: { "25/01": "Aniversário de SP" }
+        };
+
+        function isFeriado(date) {
+            const dayMonth = date.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
+            return (
+                feriados.nacional[dayMonth] ||
+                feriados.estadual[dayMonth] ||
+                feriados.municipal[dayMonth] ||
+                null
+            );
+        }
+
+        function getShift(index, pattern) {
+            const normalizedIndex = ((index % pattern.length) + pattern.length) % pattern.length;
+            return pattern[normalizedIndex];
+        }
+
+        function calculateStatistics(year, month, daysInMonth) {
+            const stats = { A: 0, B: 0, E: 0, C: 0, D: 0 };
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const currentDateObj = new Date(year, month, i);
+                const shiftIndex = Math.floor((currentDateObj - new Date(2025, 0, 1)) / (1000 * 60 * 60 * 24));
+
+                const dayShift = getShift(shiftIndex, dayPattern);
+                const nightShift = getShift(shiftIndex, nightPattern);
+
+                stats[dayShift] += 1;
+                stats[nightShift] += 1;
+            }
+
+            return stats;
+        }
+
+        function updateStatistics(stats) {
+            statisticsContainer.innerHTML = "<h2>Estatísticas</h2>";
+            statisticsContainer.classList.add("statistics-container");
+
+            const sortedStats = Object.entries(stats).sort(([teamA], [teamB]) => teamA.localeCompare(teamB));
+
+            for (const [team, count] of sortedStats) {
+                const statDiv = document.createElement("div");
+                statDiv.classList.add("stat-item");
+                statDiv.textContent = `Equipe ${team}: ${count} dias trabalhados`;
+                statisticsContainer.appendChild(statDiv);
+            }
+        }
+
+        function toggleTeamHighlight(team) {
+            if (activeTeams.has(team)) {
+                activeTeams.delete(team);
+            } else {
+                activeTeams.add(team);
+            }
+            updateCalendar();
+        }
+
+        document.querySelectorAll(".team-button").forEach(button => {
+            button.addEventListener("click", () => {
+                const team = button.getAttribute("data-team");
+                toggleTeamHighlight(team);
+                button.classList.toggle("active");
+            });
+        });
+
+        function syncSelects() {
+            document.getElementById("month-select").value = currentDate.getMonth();
+            document.getElementById("year-select").value = currentDate.getFullYear();
+        }
+
+        function isDiaDasMaes(date) {
+            // Verifica se é maio
+            if (date.getMonth() === 4) { // Maio é o mês 4 (zero-indexado)
+                const day = date.getDate();
+                const dayOfWeek = date.getDay();
+
+                // Verifica se é domingo e se é o segundo domingo do mês
+                if (dayOfWeek === 0) {
+                    // Encontra o primeiro dia do mês
+                    const firstDayOfMonth = new Date(date.getFullYear(), 4, 1).getDay();
+                    // Calcula o dia do primeiro domingo
+                    const firstSunday = firstDayOfMonth === 0 ? 1 : 8 - firstDayOfMonth;
+
+                    // Se for o segundo domingo
+                    if (day === firstSunday + 7) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        function updateCalendar() {
+    calendarContainer.innerHTML = "";
+
+    const today = new Date();
+    const month = currentDate.getMonth();
+    const year = currentDate.getFullYear();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+
+    currentMonthLabel.textContent = `${currentDate.toLocaleString("pt-BR", { month: "long" })} ${year}`;
+
+    weekDays.forEach(day => {
+        const headerDiv = document.createElement("div");
+        headerDiv.classList.add("day", "header");
+        headerDiv.textContent = day;
+        calendarContainer.appendChild(headerDiv);
+    });
+
+    for (let i = 0; i < firstDayOfMonth; i++) {
+        const emptyDiv = document.createElement("div");
+        emptyDiv.classList.add("day", "empty");
+        calendarContainer.appendChild(emptyDiv);
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("day");
+
+        const dayNumber = document.createElement("span");
+        dayNumber.textContent = i;
+
+        const currentDateObj = new Date(year, month, i);
+        const dayOfWeek = currentDateObj.getDay();
+
+        const feriadoNome = isFeriado(currentDateObj);
+
+        // Verificar se é o Dia das Mães
+        const diaDasMaes = isDiaDasMaes(currentDateObj);
+
+        // Tratar domingos, feriados e Dia das Mães
+        if (dayOfWeek === 0 || feriadoNome || diaDasMaes) {
+            dayDiv.classList.add("feriado");
+            dayNumber.classList.add("feriado-numero");
+        }
+
+        // Adicionar o número do dia
+        dayDiv.appendChild(dayNumber);
+
+        // Adicionar o nome do feriado abaixo do número do dia
+        if (feriadoNome) {
+            const feriadoDiv = document.createElement("div");
+            feriadoDiv.classList.add("feriado-nome");
+            feriadoDiv.textContent = feriadoNome;
+            dayDiv.appendChild(feriadoDiv);
+        }
+
+        // Adicionar o nome do Dia das Mães abaixo do número do dia
+        if (diaDasMaes) {
+            const diaDasMaesDiv = document.createElement("div");
+            diaDasMaesDiv.classList.add("feriado-nome");
+            diaDasMaesDiv.textContent = "Dia das Mães";
+            dayDiv.appendChild(diaDasMaesDiv);
+        }
+
+        const shiftIndex = Math.floor((currentDateObj - new Date(2025, 0, 1)) / (1000 * 60 * 60 * 24));
+        const dayShift = getShift(shiftIndex, dayPattern);
+        const nightShift = getShift(shiftIndex, nightPattern);
+
+        const dayShiftDiv = document.createElement("div");
+        dayShiftDiv.classList.add("shift", "day-shift");
+        dayShiftDiv.textContent = `Dia: ${dayShift}`;
+
+        const nightShiftDiv = document.createElement("div");
+        nightShiftDiv.classList.add("shift", "night-shift");
+        nightShiftDiv.textContent = `Noite: ${nightShift}`;
+
+        // Destaque para equipes ativas
+        if (activeTeams.has(dayShift)) {
+            dayShiftDiv.classList.add("highlight");
+        }
+        if (activeTeams.has(nightShift)) {
+            nightShiftDiv.classList.add("highlight");
+        }
+
+        // Adicionar as informações de escala de serviço
+        dayDiv.appendChild(dayShiftDiv);
+        dayDiv.appendChild(nightShiftDiv);
+
+        // Adicionar o dia ao calendário
+        calendarContainer.appendChild(dayDiv);
+    }
+
+    const stats = calculateStatistics(year, month, daysInMonth);
+    updateStatistics(stats);
+    syncSelects();
+}
+
+
+
+        document.getElementById("prev-month").addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendar();
+        });
+
+        document.getElementById("next-month").addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendar();
+        });
+
+        document.getElementById("today-button").addEventListener("click", () => {
+            currentDate = new Date();
+            updateCalendar();
+        });
+
+        document.getElementById("month-select").addEventListener("change", (event) => {
+            currentDate.setMonth(parseInt(event.target.value));
+            updateCalendar();
+        });
+
+        document.getElementById("year-select").addEventListener("change", (event) => {
+            currentDate.setFullYear(parseInt(event.target.value));
+            updateCalendar();
+        });
+
+        updateCalendar();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,256 @@
+/* General reset */
+body, h1, div, span, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9fafc;
+    color: #333;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    color: #264653;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+/* Calendar navigation */
+.calendar-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+    font-size: 1.2em;
+    color: #264653;
+}
+
+.calendar-navigation button {
+    background: none;
+    border: 2px solid #264653;
+    color: #264653;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.calendar-navigation button:hover {
+    background-color: #2a9d8f;
+    color: #fff;
+}
+
+/* Calendar grid */
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Day cells */
+.day {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.day:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Day header */
+.header {
+    font-weight: bold;
+    background-color: #2a9d8f;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Day content */
+.day span {
+    display: block;
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #264653;
+}
+
+.day .shift {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #6d6875;
+}
+
+.day .shift.day-shift {
+    color: #2a9d8f;
+}
+
+.day .shift.night-shift {
+    color: #e76f51;
+}
+
+/* Statistics */
+.statistics-container {
+    max-width: 800px;
+    margin: 30px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.statistics-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #264653;
+}
+
+.stat-item {
+    font-size: 1.1em;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f4f4f9;
+    border-left: 4px solid #2a9d8f;
+    border-radius: 5px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    #calendar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .calendar-navigation {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+#today-button {
+    background: none;
+    border: 2px solid #264653;
+    color: #264653;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#today-button:hover {
+    background-color: #2a9d8f;
+    color: #fff;
+}
+
+/* Destaque para o dia atual */
+.today {
+    background-color: #dff7f4;
+    color: #ffffff;
+    border: 2px solid #264653;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.team-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.team-button {
+    padding: 10px 20px;
+    border: 2px solid #264653;
+    background: none;
+    color: #264653;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.team-button:hover {
+    background-color: #2a9d8f;
+    color: #ffffff;
+}
+
+.team-button.active {
+    background-color: #264653;
+    color: #ffffff;
+}
+
+.highlight {
+    background-color: #fef08a;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 2px 5px;
+}
+
+/* Feriados e domingos */
+.feriado {
+    background-color: #e4e4e4;
+}
+
+.feriado-numero {
+    color: #d32f2f !important; /* Vermelho */
+    font-weight: bold;
+}
+
+.feriado-nome {
+    font-size: 0.8em;
+    color: #d32f2f; /* Vermelho */
+    font-weight: bold;
+    margin-top: 5px;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+
+
+.calendar-navigation select {
+    padding: 3px;
+    font-size: 1em;
+    border: 2px solid #264653;
+    border-radius: 5px;
+    background-color: #f9fafc;
+    color: #264653;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.calendar-navigation select:focus {
+    outline: none;
+    border-color: #2a9d8f;
+    background-color: #eafaf6;
+    color: #264653;
+}
+
+.calendar-navigation select:hover {
+    border-color: #2a9d8f;
+    background-color: #eafaf6;
+}
+
+
+
