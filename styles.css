@@ -6,17 +6,18 @@ body, h1, div, span, button {
 }
 
 body {
-    font-family: 'Roboto', Arial, sans-serif;
+    font-family: 'Poppins', Arial, sans-serif;
     margin: 20px;
-    background-color: #f9fafc;
-    color: #333;
+    background-color: #f8fafc; /* Fundo claro e suave */
+    color: #374151;
 }
 
 /* Title */
 h1 {
     text-align: center;
-    color: #264653;
+    color: #334155; /* Azul suave */
     font-size: 2.5em;
+    font-weight: bold;
     margin-bottom: 20px;
 }
 
@@ -26,29 +27,45 @@ h1 {
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    gap: 20px;
+    gap: 15px;
     font-size: 1.2em;
-    color: #264653;
+    color: #334155;
 }
 
 .calendar-navigation button {
-    background: none;
-    border: 2px solid #264653;
-    color: #264653;
+    background: #94a3b8; /* Cinza azulado */
+    border: none;
+    color: white;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5em;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .calendar-navigation button:hover {
-    background-color: #2a9d8f;
-    color: #fff;
+    background-color: #64748b; /* Tom mais escuro */
+    transform: scale(1.1);
+}
+
+.calendar-navigation select {
+    padding: 5px;
+    font-size: 1em;
+    border: 2px solid #94a3b8;
+    border-radius: 8px;
+    background-color: white;
+    color: #374151;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.calendar-navigation select:focus {
+    outline: none;
+    border-color: #64748b;
 }
 
 /* Calendar grid */
@@ -62,50 +79,112 @@ h1 {
 
 /* Day cells */
 .day {
-    padding: 15px;
-    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border: 1px solid #e2e8f0; /* Cinza claro */
     background-color: #ffffff;
     text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
 }
 
 .day:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+
+/* Today highlight */
+.today {
+    background: linear-gradient(135deg, #f1f2f5, #d8eaff); /* Gradiente azul claro */
+    color: #1e293b !important;
+    font-weight: bold;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    border: none;
+}
+
 
 /* Day header */
 .header {
     font-weight: bold;
-    background-color: #2a9d8f;
-    color: #ffffff;
-    text-align: center;
+    background-color: #64748b; /* Azul escuro */
+    color: white;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    font-size: 1em;
 }
 
-/* Day content */
+/* Day number */
 .day span {
     display: block;
-    font-weight: bold;
     font-size: 1.2em;
-    color: #264653;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 10px;
 }
 
-.day .shift {
+/* Shifts */
+.shift {
     margin-top: 5px;
     font-size: 0.9em;
-    color: #6d6875;
+    font-weight: bold;
+    color: #475569;
 }
 
-.day .shift.day-shift {
-    color: #2a9d8f;
+.shift.day-shift {
+    color: #0c9e68; /* Verde suave */
 }
 
-.day .shift.night-shift {
-    color: #e76f51;
+.shift.night-shift {
+    color: #bd0505; /* Vermelho suave */
+}
+
+/* Feriados */
+.feriado {
+    background-color: #fef3c7; /* Amarelo pálido */
+}
+
+.feriado .feriado-numero {
+    color: #d97706; /* Laranja suave */
+    font-weight: bold;
+}
+
+.feriado .feriado-nome {
+    font-size: 0.85em;
+    color: #d97706;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Team buttons */
+.team-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.team-button {
+    padding: 10px 20px;
+    border: none;
+    background: #94a3b8; /* Cinza azulado */
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.team-button:hover {
+    background-color: #64748b;
+    transform: scale(1.1);
+}
+
+.team-button.active {
+    background-color: #34d399;
 }
 
 /* Statistics */
@@ -114,143 +193,88 @@ h1 {
     margin: 30px auto;
     background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #94a3b8;
 }
 
 .statistics-container h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #264653;
+    color: #1e293b;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 .stat-item {
     font-size: 1.1em;
     margin: 10px 0;
     padding: 10px;
-    background-color: #f4f4f9;
-    border-left: 4px solid #2a9d8f;
-    border-radius: 5px;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    border-left: 4px solid #94a3b8;
 }
 
-/* Responsiveness */
-@media (max-width: 768px) {
-    #calendar {
-        grid-template-columns: repeat(2, 1fr);
-    }
 
-    .calendar-navigation {
-        flex-direction: column;
-        gap: 10px;
-    }
+/* Botões de equipes ativas */
+.team-button.active[data-team="A"] {
+    background-color: #34d399; /* Verde */
+    border: 2px solid #059669; /* Tom mais escuro */
 }
 
-#today-button {
-    background: none;
-    border: 2px solid #264653;
-    color: #264653;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+.team-button.active[data-team="B"] {
+    background-color: #60a5fa; /* Azul */
+    border: 2px solid #2563eb;
 }
 
-#today-button:hover {
-    background-color: #2a9d8f;
-    color: #fff;
+.team-button.active[data-team="C"] {
+    background-color: #f472b6; /* Rosa */
+    border: 2px solid #be185d;
 }
 
-/* Destaque para o dia atual */
-.today {
-    background-color: #dff7f4;
-    color: #ffffff;
-    border: 2px solid #264653;
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.team-button.active[data-team="D"] {
+    background-color: #fb923c; /* Laranja */
+    border: 2px solid #ea580c;
 }
 
-.team-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
+.team-button.active[data-team="E"] {
+    background-color: #facc15; /* Amarelo */
+    border: 2px solid #ca8a04;
 }
 
-.team-button {
-    padding: 10px 20px;
-    border: 2px solid #264653;
-    background: none;
-    color: #264653;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.team-button:hover {
-    background-color: #2a9d8f;
-    color: #ffffff;
-}
-
-.team-button.active {
-    background-color: #264653;
-    color: #ffffff;
-}
-
-.highlight {
-    background-color: #fef08a;
-    border-radius: 5px;
-    font-weight: bold;
+/* Destaque de turnos no calendário */
+.shift.highlight[data-team="A"] {
+    background-color: #34d399;
+    color: white;
+    border-radius: 4px;
     padding: 2px 5px;
 }
 
-/* Feriados e domingos */
-.feriado {
-    background-color: #e4e4e4;
+.shift.highlight[data-team="B"] {
+    background-color: #60a5fa;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 5px;
 }
 
-.feriado-numero {
-    color: #d32f2f !important; /* Vermelho */
-    font-weight: bold;
+.shift.highlight[data-team="C"] {
+    background-color: #d196f3;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 5px;
 }
 
-.feriado-nome {
-    font-size: 0.8em;
-    color: #d32f2f; /* Vermelho */
-    font-weight: bold;
-    margin-top: 5px;
-    text-align: center;
-    word-wrap: break-word;
-    white-space: normal;
+.shift.highlight[data-team="D"] {
+    background-color: #fb923c;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 5px;
 }
 
-
-
-.calendar-navigation select {
-    padding: 3px;
-    font-size: 1em;
-    border: 2px solid #264653;
-    border-radius: 5px;
-    background-color: #f9fafc;
-    color: #264653;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+.shift.highlight[data-team="E"] {
+    background-color: #facc15;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 5px;
 }
-
-.calendar-navigation select:focus {
-    outline: none;
-    border-color: #2a9d8f;
-    background-color: #eafaf6;
-    color: #264653;
-}
-
-.calendar-navigation select:hover {
-    border-color: #2a9d8f;
-    background-color: #eafaf6;
-}
-
-
 
