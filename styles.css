@@ -96,11 +96,19 @@ h1 {
 
 /* Today highlight */
 .today {
-    background: linear-gradient(135deg, #f1f2f5, #d8eaff); /* Gradiente azul claro */
-    color: #1e293b !important;
+    background: linear-gradient(135deg, #e5e7eb, #cbd5e1); /* Gradiente sutil entre tons de cinza claro e azul acinzentado */
+    color: #1e293b !important; /* Azul escuro para o texto */
     font-weight: bold;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    border: none;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra suave */
+    border: 2px solid #94a3b8; /* Cinza azulado para combinar com os botões */
+    border-radius: 12px;
+    transform: scale(1.05); /* Leve aumento para destaque */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.today:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra levemente mais intensa ao passar o mouse */
 }
 
 
