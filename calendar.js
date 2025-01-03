@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
     const calendarContainer = document.getElementById("calendar");
-    const currentMonthLabel = document.getElementById("current-month");
+    const currentMonthLargeLabel = document.getElementById("current-month-large");
     const statisticsContainer = document.getElementById("statistics");
 
     const today = new Date();
@@ -94,7 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const firstDay = new Date(year, month, 1).getDay();
 
-        currentMonthLabel.textContent = `${currentDate.toLocaleString("pt-BR", { month: "long" })} ${year}`;
+        const monthName = currentDate.toLocaleString("pt-BR", { month: "long" });
+        currentMonthLargeLabel.textContent = `${monthName} ${year}`;
 
         weekDays.forEach(day => {
             const headerDiv = document.createElement("div");
@@ -125,8 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (date.toDateString() === today.toDateString()) {
                 dayDiv.classList.add("today");
-            
-                // Adicionar o rodapé com "HOJE"
+
                 const footerDiv = document.createElement("div");
                 footerDiv.className = "today-footer";
                 footerDiv.textContent = "HOJE";
