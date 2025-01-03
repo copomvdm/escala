@@ -125,6 +125,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (date.toDateString() === today.toDateString()) {
                 dayDiv.classList.add("today");
+            
+                // Adicionar o rodapé com "HOJE"
+                const footerDiv = document.createElement("div");
+                footerDiv.className = "today-footer";
+                footerDiv.textContent = "HOJE";
+                dayDiv.appendChild(footerDiv);
             }
 
             dayDiv.appendChild(dayNumber);

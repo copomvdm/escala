@@ -111,6 +111,24 @@ h1 {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra levemente mais intensa ao passar o mouse */
 }
 
+.today-footer {
+    position: absolute;
+    bottom: 5px; /* Colado na margem inferior do card */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.85em;
+    font-weight: bold;
+    color: #1e293b; /* Azul escuro */
+    text-align: center;
+    background: #94a3b8; /* Cinza azulado */
+    padding: 5px;
+    border-radius: 4px;
+    width: calc(100% - 10px); /* Ligeiramente menor que o card */
+    box-sizing: border-box;
+}
+
+
+
 
 /* Day header */
 .header {
