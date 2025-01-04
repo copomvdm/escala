@@ -15,14 +15,22 @@
 
     <div class="calendar-container">
         <div class="calendar-header">
-            <button id="prevMonth" class="nav-button">&lt;</button>
+            <div class="prev-container">
+                <button id="prevMonth" class="nav-button" title="Volta para o mês anterior">&lt;</button>
+                <span id="prevMonthName" class="month-name"></span>
+            </div>
             <select id="monthSelect"></select>
             <select id="yearSelect"></select>
-            <button id="todayButton" class="nav-button">
+            <button id="todayButton" class="nav-button" title="Voltar para a data de hoje">
                 <span class="calendar-icon">&#x1F4C5;</span>
             </button>
-            <button id="nextMonth" class="nav-button">&gt;</button>
+            <div class="next-container">
+                <span id="nextMonthName" class="month-name"></span>
+                <button id="nextMonth" class="nav-button" title="Avança para o próximo mês">&gt;</button>
+            </div>
         </div>
+        
+
 
         <div class="team-buttons">
             <button class="team-button" data-team="A">Equipe A</button>
@@ -37,11 +45,15 @@
         <div class="calendar-grid" id="calendarBody">
             <!-- Gerado dinamicamente -->
         </div>
+
+        <div class="estatistica">
+
+        </div>
     </div>
     <footer class="page-footer">
         <p>Desenvolvido pela Equipe B</p>
     </footer>
-    
+
     <script src="./js/main.js"></script>
 </body>
 
