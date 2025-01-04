@@ -61,15 +61,19 @@ const calendarBody = document.getElementById("calendarBody");
             const easter = calculateEaster(year);
             const carnival = new Date(easter);
             carnival.setDate(easter.getDate() - 47);
+            const goodFriday = new Date(easter);
+            goodFriday.setDate(easter.getDate() - 2); // Sexta-feira Santa
             const corpusChristi = new Date(easter);
             corpusChristi.setDate(easter.getDate() + 60);
-
+        
             return [
                 { date: carnival, name: "Carnaval" },
+                { date: goodFriday, name: "Paixão de Cristo" }, // Adicionado
                 { date: easter, name: "Páscoa" },
                 { date: corpusChristi, name: "Corpus Christi" }
             ];
         }
+        
 
         function getHolidays(year) {
             const mobileHolidays = calculateMobileHolidays(year);
