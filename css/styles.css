@@ -140,7 +140,7 @@ body {
 }
 
 .highlighted {
-    color: white !important;
+    color: black !important;
     background-color: var(--team-color) !important;
     font-weight: bold !important;
 }
@@ -193,8 +193,10 @@ body {
 }
 
 .team-button.active {
-    color: white;
+    color: black; /* Alterado para preto */
+    background-color: var(--team-color); /* Mantém a cor de fundo */
 }
+
 
 .team-button:hover {
     transform: translateY(-5px);
