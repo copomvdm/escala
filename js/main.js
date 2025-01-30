@@ -299,8 +299,8 @@ function renderCalendar() {
         dayNumber.textContent = day;
 
         const dayDetails = document.createElement("div");
-dayDetails.classList.add("day-details");
-dayDetails.innerHTML = `
+        dayDetails.classList.add("day-details");
+        dayDetails.innerHTML = `
     <div class="day-text-wrapper">
         <i class="fas fa-sun sun-icon"></i>
         <span class="day-text ${highlightedTeams.has(dayTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[dayTeam]}">
@@ -322,7 +322,7 @@ dayDetails.innerHTML = `
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
-        }).replace('feira', '')}`;
+        }).replace('-feira', '')}`;
 
         cell.appendChild(dayNumber);
         cell.appendChild(dayDetails);
@@ -393,14 +393,14 @@ document.addEventListener("DOMContentLoaded", () => {
     prevMonth.addEventListener("click", () => {
         let currentMonth = parseInt(monthSelect.value);
         let currentYear = parseInt(yearSelect.value);
-    
+
         if (currentMonth === 0) {
             currentMonth = 11;
             currentYear--;
         } else {
             currentMonth--;
         }
-    
+
         date = new Date(currentYear, currentMonth, 1);
         monthSelect.value = currentMonth;
         yearSelect.value = currentYear;
@@ -410,33 +410,44 @@ document.addEventListener("DOMContentLoaded", () => {
     nextMonth.addEventListener("click", () => {
         let currentMonth = parseInt(monthSelect.value);
         let currentYear = parseInt(yearSelect.value);
-    
+
         if (currentMonth === 11) {
             currentMonth = 0;
             currentYear++;
         } else {
             currentMonth++;
         }
-    
+
         date = new Date(currentYear, currentMonth, 1);
         monthSelect.value = currentMonth;
         yearSelect.value = currentYear;
         renderCalendar();
     });
 
+    // Desativa o tooltip quando os selects de mês e ano são abertos
+    monthSelect.addEventListener("focus", () => {
+        tooltip.style.visibility = "hidden";
+    });
+    yearSelect.addEventListener("focus", () => {
+        tooltip.style.visibility = "hidden";
+    });
+
+    // Reabilita o tooltip após a mudança de mês ou ano
     monthSelect.addEventListener("change", () => {
         let selectedMonth = parseInt(monthSelect.value);
         let selectedYear = parseInt(yearSelect.value);
         date = new Date(selectedYear, selectedMonth, 1);
         renderCalendar();
+        tooltip.style.visibility = "hidden"; // Garante que o tooltip se esconda ao trocar
     });
-    
+
 
     yearSelect.addEventListener("change", () => {
         let selectedMonth = parseInt(monthSelect.value);
         let selectedYear = parseInt(yearSelect.value);
         date = new Date(selectedYear, selectedMonth, 1);
         renderCalendar();
+        tooltip.style.visibility = "hidden"; // Garante que o tooltip se esconda ao trocar
     });
 
     teamButtons.forEach(button => {
