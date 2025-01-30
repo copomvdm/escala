@@ -241,6 +241,19 @@ function renderCalendar() {
         tooltip.style.top = `${event.pageY + 10}px`; // Atualiza posição vertical
     }
 
+    // Remove o tooltip de qualquer célula ao renderizar novamente
+    function removeTooltipIfPresent() {
+        if (tooltip.style.visibility === "visible") {
+            tooltip.style.visibility = "hidden";
+        }
+    }
+
+    // Garantir que o tooltip não fique preso quando o mês mudar
+    function resetTooltipOnMonthChange() {
+        removeTooltipIfPresent(); // Esconde o tooltip ao mudar de mês
+    }
+
+    // Criando as células do calendário
     for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement("div");
         emptyCell.classList.add("calendar-cell");
@@ -286,11 +299,23 @@ function renderCalendar() {
         dayNumber.textContent = day;
 
         const dayDetails = document.createElement("div");
-        dayDetails.classList.add("day-details");
-        dayDetails.innerHTML = ` 
-            <span class="day-text ${highlightedTeams.has(dayTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[dayTeam]}">Dia: ${dayTeam}</span>
-            <span class="night-text ${highlightedTeams.has(nightTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[nightTeam]}">Noite: ${nightTeam}</span>
-        `;
+dayDetails.classList.add("day-details");
+dayDetails.innerHTML = `
+    <div class="day-text-wrapper">
+        <i class="fas fa-sun sun-icon"></i>
+        <span class="day-text ${highlightedTeams.has(dayTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[dayTeam]}">
+            Dia: ${dayTeam}
+        </span>
+    </div>
+    <div class="night-text-wrapper">
+        <i class="fas fa-moon moon-icon"></i>
+        <span class="night-text ${highlightedTeams.has(nightTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[nightTeam]}">
+            Noite: ${nightTeam}
+        </span>
+    </div>
+`;
+
+
 
         const dateText = `${currentDate.toLocaleDateString("pt-BR", {
             weekday: 'long',
@@ -304,7 +329,8 @@ function renderCalendar() {
 
         // Tooltip aparecerá ao passar o mouse sobre a célula
         cell.addEventListener("mouseenter", (event) => {
-            showTooltip(event, dateText); // Mostra o tooltip
+            removeTooltipIfPresent(); // Remove tooltip anterior, se houver
+            showTooltip(event, dateText); // Mostra o novo tooltip
         });
 
         // Atualiza a posição do tooltip com base no movimento do mouse
@@ -328,9 +354,9 @@ function renderCalendar() {
         calendarBody.appendChild(cell);
     }
 
-    // Esconde o tooltip ao mudar de mês
+    // Resetar tooltip ao mudar de mês
     const monthChangeEventListener = () => {
-        hideTooltip();
+        resetTooltipOnMonthChange();
     };
 
     // Ouça qualquer evento de mudança de mês (seja para o próximo ou anterior)
@@ -357,6 +383,7 @@ function renderCalendar() {
         nextMonthName.style.display = "inline-block";
     }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     populateMonthSelect();

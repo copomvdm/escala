@@ -125,6 +125,8 @@ body {
     text-align: center;
     border-radius: 5px;
     padding: 0px 5px;
+    font-weight: bold;
+    font-size: 1em;
 }
 
 .calendar-cell .day-text {
@@ -134,7 +136,7 @@ body {
 }
 
 .calendar-cell .night-text {
-    color: red;
+    color: rgb(151, 44, 44);
     flex: 1;
     text-align: center;
 }
@@ -231,7 +233,7 @@ body {
 }
 
 .holiday {
-    background-color: #ffe5b4;
+    background-color: #f7f0e5;
     /* Fundo laranja claro */
     border: 1px solid #ffa500;
     /* Borda laranja */
@@ -249,9 +251,10 @@ body {
 .holiday-name {
     font-size: 0.85rem;
     font-weight: bold;
-    color: #d35400;
+    color: #03852e;
     /* Texto laranja escuro */
     margin-bottom: 10px;
+    margin-top: 5px;
     /* Espaço entre o nome do feriado e os detalhes do dia */
 }
 
@@ -382,6 +385,43 @@ body {
 
 .date-text {
     font-family: 'Poppins', sans-serif;
+}
+
+.sun-icon {
+    color: #ffcc00; /* Amarelo sol */
+    font-size: 1.1rem;
+    animation: rotate-sun 5s linear infinite;
+    margin-bottom: 5px;
+}
+
+.moon-icon {
+    color: #b0c4de; /* Prata, para a lua */
+    font-size: 1.1rem;
+    animation: move-moon 2s ease-in-out infinite;
+    margin-bottom: 5px;
+}
+
+/* Animação para o sol girar levemente */
+@keyframes rotate-sun {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animação para a lua mover-se suavemente para cima e para baixo */
+@keyframes move-moon {
+    0% {
+        transform: translateY(0); /* Posição inicial */
+    }
+    50% {
+        transform: translateY(-5px); /* Movimento para cima */
+    }
+    100% {
+        transform: translateY(0); /* Retorno para a posição inicial */
+    }
 }
 
 
