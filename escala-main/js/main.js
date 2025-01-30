@@ -344,6 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
         date = new Date(selectedYear, selectedMonth, 1);
         renderCalendar();
     });
+    
 
     yearSelect.addEventListener("change", () => {
         let selectedMonth = parseInt(monthSelect.value);
