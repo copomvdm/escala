@@ -388,7 +388,7 @@ body {
 }
 
 .sun-icon {
-    color: #ffcc00; /* Amarelo sol */
+    color: #f7d343; /* Amarelo sol */
     font-size: 1.1rem;
     animation: rotate-sun 5s linear infinite;
     margin-bottom: 5px;
