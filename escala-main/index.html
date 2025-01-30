@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="shortcut icon" href="./assets/calendario-ico.png" type="image/x-icon">
+    <title>Escala de Serviço - COPOM</title>
+</head>
+
+<body>
+    <h1 class="page-title">Escala de Serviço das Equipes - COPOM</h1>
+
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <div class="prev-container">
+                <button id="prevMonth" class="nav-button" title="Volta para o mês anterior">&lt;</button>
+                <span id="prevMonthName" class="month-name"></span>
+            </div>
+            <select id="monthSelect"></select>
+            <select id="yearSelect"></select>
+            <button id="todayButton" class="nav-button" title="Voltar para a data de hoje">
+                <span class="calendar-icon">&#x1F4C5;</span>
+            </button>
+            <div class="next-container">
+                <span id="nextMonthName" class="month-name"></span>
+                <button id="nextMonth" class="nav-button" title="Avança para o próximo mês">&gt;</button>
+            </div>
+        </div>
+        
+
+
+        <div class="team-buttons">
+            <button class="team-button" data-team="A">Equipe A</button>
+            <button class="team-button" data-team="B">Equipe B</button>
+            <button class="team-button" data-team="C">Equipe C</button>
+            <button class="team-button" data-team="D">Equipe D</button>
+            <button class="team-button" data-team="E">Equipe E</button>
+        </div>
+
+        <div class="calendar-date" id="calendarDate"></div>
+
+        <div class="calendar-grid" id="calendarBody">
+            <!-- Gerado dinamicamente -->
+        </div>
+
+        <div class="estatistica">
+
+        </div>
+    </div>
+    <footer class="page-footer">
+        <p>Desenvolvido pela Equipe B</p>
+    </footer>
+
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
