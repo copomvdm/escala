@@ -2,6 +2,7 @@ const calendarBody = document.getElementById("calendarBody");
 const calendarDate = document.getElementById("calendarDate");
 const monthSelect = document.getElementById("monthSelect");
 const yearSelect = document.getElementById("yearSelect");
+const tooltip = document.getElementById("tooltip");
 const prevMonth = document.getElementById("prevMonth");
 const nextMonth = document.getElementById("nextMonth");
 const teamButtons = document.querySelectorAll(".team-button");
@@ -424,6 +425,19 @@ document.addEventListener("DOMContentLoaded", () => {
         renderCalendar();
     });
 
+    // Evento para ocultar e mostrar o tooltip com atraso de 1 segundo após fechar o select
+    monthSelect.addEventListener("blur", () => {
+        tooltipTimeout = setTimeout(() => {
+            tooltip.style.visibility = "visible";
+        }, 1000); // Espera 1 segundo
+    });
+
+    yearSelect.addEventListener("blur", () => {
+        tooltipTimeout = setTimeout(() => {
+            tooltip.style.visibility = "visible";
+        }, 1000); // Espera 1 segundo
+    });
+
     // Desativa o tooltip quando os selects de mês e ano são abertos
     monthSelect.addEventListener("focus", () => {
         tooltip.style.visibility = "hidden";
@@ -441,7 +455,6 @@ document.addEventListener("DOMContentLoaded", () => {
         tooltip.style.visibility = "hidden"; // Garante que o tooltip se esconda ao trocar
     });
 
-
     yearSelect.addEventListener("change", () => {
         let selectedMonth = parseInt(monthSelect.value);
         let selectedYear = parseInt(yearSelect.value);
@@ -449,6 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderCalendar();
         tooltip.style.visibility = "hidden"; // Garante que o tooltip se esconda ao trocar
     });
+
 
     teamButtons.forEach(button => {
         button.addEventListener("click", () => {
