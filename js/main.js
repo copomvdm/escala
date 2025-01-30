@@ -305,36 +305,51 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCalendar();
 
     prevMonth.addEventListener("click", () => {
-        const currentYear = new Date().getFullYear();
-        if (date.getFullYear() === currentYear && date.getMonth() === 0) {
-            // Se já estiver em janeiro do ano atual, não faça nada
-            return;
+        let currentMonth = parseInt(monthSelect.value);
+        let currentYear = parseInt(yearSelect.value);
+    
+        if (currentMonth === 0) {
+            currentMonth = 11;
+            currentYear--;
+        } else {
+            currentMonth--;
         }
-        date.setMonth(date.getMonth() - 1);
-        if (date.getFullYear() < currentYear) {
-            // Impede retroceder para o ano anterior
-            date.setMonth(0); // Volta para janeiro
-            date.setFullYear(currentYear);
-        }
-        monthSelect.value = date.getMonth();
-        yearSelect.value = date.getFullYear();
+    
+        date = new Date(currentYear, currentMonth, 1);
+        monthSelect.value = currentMonth;
+        yearSelect.value = currentYear;
         renderCalendar();
     });
 
     nextMonth.addEventListener("click", () => {
-        date.setMonth(date.getMonth() + 1);
-        monthSelect.value = date.getMonth();
-        yearSelect.value = date.getFullYear();
+        let currentMonth = parseInt(monthSelect.value);
+        let currentYear = parseInt(yearSelect.value);
+    
+        if (currentMonth === 11) {
+            currentMonth = 0;
+            currentYear++;
+        } else {
+            currentMonth++;
+        }
+    
+        date = new Date(currentYear, currentMonth, 1);
+        monthSelect.value = currentMonth;
+        yearSelect.value = currentYear;
         renderCalendar();
     });
 
     monthSelect.addEventListener("change", () => {
-        date.setMonth(monthSelect.value);
+        let selectedMonth = parseInt(monthSelect.value);
+        let selectedYear = parseInt(yearSelect.value);
+        date = new Date(selectedYear, selectedMonth, 1);
         renderCalendar();
     });
+    
 
     yearSelect.addEventListener("change", () => {
-        date.setFullYear(yearSelect.value);
+        let selectedMonth = parseInt(monthSelect.value);
+        let selectedYear = parseInt(yearSelect.value);
+        date = new Date(selectedYear, selectedMonth, 1);
         renderCalendar();
     });
 
