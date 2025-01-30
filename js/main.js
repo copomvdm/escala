@@ -75,7 +75,6 @@ function calculateMobileHolidays(year) {
     ];
 }
 
-
 function getHolidays(year) {
     const mobileHolidays = calculateMobileHolidays(year);
 
@@ -209,7 +208,6 @@ function renderCalendar() {
         calendarBody.appendChild(header);
     });
 
-    // Inicializa contadores de dias por equipe
     const teamWorkDays = {
         A: 0,
         B: 0,
@@ -217,6 +215,18 @@ function renderCalendar() {
         D: 0,
         E: 0
     };
+
+    // Criação do tooltip (texto flutuante)
+    const tooltip = document.createElement("div");
+    tooltip.classList.add("tooltip");
+    tooltip.style.position = "absolute";
+    tooltip.style.visibility = "hidden"; // Inicialmente invisível
+    tooltip.style.fontSize = "0.7rem";
+    tooltip.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
+    tooltip.style.color = "#fff";
+    tooltip.style.padding = "5px";
+    tooltip.style.borderRadius = "4px";
+    document.body.appendChild(tooltip);
 
     for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement("div");
@@ -231,7 +241,6 @@ function renderCalendar() {
         const nightTeam = nightSequence[nightIndex];
         const formattedDate = currentDate.toISOString().split("T")[0];
 
-        // Incrementa contadores de dias trabalhados
         teamWorkDays[dayTeam]++;
         teamWorkDays[nightTeam]++;
 
@@ -265,37 +274,75 @@ function renderCalendar() {
 
         const dayDetails = document.createElement("div");
         dayDetails.classList.add("day-details");
-        dayDetails.innerHTML = `
-                    <span class="day-text ${highlightedTeams.has(dayTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[dayTeam]}">Dia: ${dayTeam}</span>
-                    <span class="night-text ${highlightedTeams.has(nightTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[nightTeam]}">Noite: ${nightTeam}</span>
-                `;
+        dayDetails.innerHTML = ` 
+            <span class="day-text ${highlightedTeams.has(dayTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[dayTeam]}">Dia: ${dayTeam}</span>
+            <span class="night-text ${highlightedTeams.has(nightTeam) ? "highlighted" : ""}" style="--team-color: ${teamColors[nightTeam]}">Noite: ${nightTeam}</span>
+        `;
 
+        const dateText = `${currentDate.toLocaleDateString("pt-BR", {
+            weekday: 'long',
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }).replace('-feira', '')}`;
+
+        cell.appendChild(dayNumber);
+        cell.appendChild(dayDetails);
+
+        // Tooltip aparecerá ao passar o mouse sobre a célula
+        cell.addEventListener("mouseenter", (event) => {
+            tooltip.textContent = dateText; // Define o conteúdo do tooltip
+            tooltip.style.visibility = "visible"; // Torna o tooltip visível
+        });
+
+        // Atualiza a posição do tooltip com base no movimento do mouse
+        cell.addEventListener("mousemove", (event) => {
+            const mouseX = event.pageX + 10; // Adiciona um pequeno deslocamento
+            const mouseY = event.pageY + 10; // Adiciona um pequeno deslocamento
+            tooltip.style.left = `${mouseX}px`;
+            tooltip.style.top = `${mouseY}px`;
+        });
+
+        // Esconde o tooltip quando o mouse sai da célula
+        cell.addEventListener("mouseleave", () => {
+            tooltip.style.visibility = "hidden";
+        });
+
+        // Só adiciona o texto da data após o nome do feriado, se for o caso
         if (holidays[formattedDate]) {
             const holidayName = document.createElement("div");
             holidayName.classList.add("holiday-name");
             holidayName.textContent = holidays[formattedDate];
-            cell.appendChild(dayNumber);
             cell.appendChild(holidayName);
-        } else {
-            cell.appendChild(dayNumber);
         }
 
-        cell.appendChild(dayDetails);
         calendarBody.appendChild(cell);
     }
 
-    // Atualiza a div estatística com os dados calculados
     const estatisticaDiv = document.querySelector(".estatistica");
     estatisticaDiv.innerHTML = "<h3>Estatísticas de Trabalho</h3>";
     Object.keys(teamWorkDays).forEach(team => {
         const teamStat = document.createElement("div");
-        teamStat.innerHTML = `
-        <span class="team">Equipe ${team}</span>
-        <span>${teamWorkDays[team]} dias</span>
-    `;
+        teamStat.innerHTML = ` 
+            <span class="team">Equipe ${team}</span>
+            <span>${teamWorkDays[team]} dias</span>
+        `;
         estatisticaDiv.appendChild(teamStat);
     });
+
+    const maxYear = yearSelect.options[yearSelect.options.length - 1].value;
+    if (date.getFullYear() == maxYear && date.getMonth() == 11) {
+        nextMonth.style.display = "none";
+        nextMonthName.style.display = "none";
+    } else {
+        nextMonth.style.display = "inline-block";
+        nextMonthName.style.display = "inline-block";
+    }
 }
+
+
+
+
 
 
 

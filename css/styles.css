@@ -380,4 +380,8 @@ body {
     text-transform: capitalize;
 }
 
+.date-text {
+    font-family: 'Poppins', sans-serif;
+}
+
 
