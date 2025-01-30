@@ -228,6 +228,19 @@ function renderCalendar() {
     tooltip.style.borderRadius = "4px";
     document.body.appendChild(tooltip);
 
+    // Função para esconder o tooltip
+    function hideTooltip() {
+        tooltip.style.visibility = "hidden";
+    }
+
+    // Função para mostrar o tooltip
+    function showTooltip(event, dateText) {
+        tooltip.textContent = dateText; // Define o conteúdo do tooltip
+        tooltip.style.visibility = "visible"; // Torna o tooltip visível
+        tooltip.style.left = `${event.pageX + 10}px`; // Atualiza posição horizontal
+        tooltip.style.top = `${event.pageY + 10}px`; // Atualiza posição vertical
+    }
+
     for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement("div");
         emptyCell.classList.add("calendar-cell");
@@ -284,28 +297,24 @@ function renderCalendar() {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
-        }).replace('-feira', '')}`;
+        }).replace('feira', '')}`;
 
         cell.appendChild(dayNumber);
         cell.appendChild(dayDetails);
 
         // Tooltip aparecerá ao passar o mouse sobre a célula
         cell.addEventListener("mouseenter", (event) => {
-            tooltip.textContent = dateText; // Define o conteúdo do tooltip
-            tooltip.style.visibility = "visible"; // Torna o tooltip visível
+            showTooltip(event, dateText); // Mostra o tooltip
         });
 
         // Atualiza a posição do tooltip com base no movimento do mouse
         cell.addEventListener("mousemove", (event) => {
-            const mouseX = event.pageX + 10; // Adiciona um pequeno deslocamento
-            const mouseY = event.pageY + 10; // Adiciona um pequeno deslocamento
-            tooltip.style.left = `${mouseX}px`;
-            tooltip.style.top = `${mouseY}px`;
+            showTooltip(event, dateText); // Atualiza a posição do tooltip
         });
 
         // Esconde o tooltip quando o mouse sai da célula
         cell.addEventListener("mouseleave", () => {
-            tooltip.style.visibility = "hidden";
+            hideTooltip(); // Esconde o tooltip
         });
 
         // Só adiciona o texto da data após o nome do feriado, se for o caso
@@ -318,6 +327,15 @@ function renderCalendar() {
 
         calendarBody.appendChild(cell);
     }
+
+    // Esconde o tooltip ao mudar de mês
+    const monthChangeEventListener = () => {
+        hideTooltip();
+    };
+
+    // Ouça qualquer evento de mudança de mês (seja para o próximo ou anterior)
+    nextMonth.addEventListener("click", monthChangeEventListener);
+    prevMonth.addEventListener("click", monthChangeEventListener);
 
     const estatisticaDiv = document.querySelector(".estatistica");
     estatisticaDiv.innerHTML = "<h3>Estatísticas de Trabalho</h3>";
@@ -339,12 +357,6 @@ function renderCalendar() {
         nextMonthName.style.display = "inline-block";
     }
 }
-
-
-
-
-
-
 
 document.addEventListener("DOMContentLoaded", () => {
     populateMonthSelect();
