@@ -489,4 +489,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     renderCalendar();
+
+    document.addEventListener("DOMContentLoaded", () => {
+    // API gratuita para contar visitas
+    fetch("https://api.countapi.xyz/hit/meusite.com/visitas")
+        .then(response => response.json())
+        .then(data => {
+            console.log(`Número de visitas: ${data.value}`);
+        })
+        .catch(error => console.error("Erro ao obter visitas:", error));
+});
+
 });
