@@ -489,15 +489,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     renderCalendar();
-
-    const visitCounterUrl = "https://api.countapi.xyz/hit/copomvdm.github.io/escala";
-
-fetch(visitCounterUrl)
-  .then(response => response.json())
-  .then(data => {
-    console.log(`Número de visitas: ${data.value}`);
-  })
-  .catch(error => console.error("Erro ao obter contagem de visitas:", error));
-
-
 });
