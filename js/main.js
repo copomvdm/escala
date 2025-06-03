@@ -7,13 +7,14 @@ const prevMonth = document.getElementById("prevMonth");
 const nextMonth = document.getElementById("nextMonth");
 const teamButtons = document.querySelectorAll(".team-button");
 const highlightedTeams = new Set();
+const rootStyles = getComputedStyle(document.documentElement);
 
 const teamColors = {
-    A: "#34d399",
-    B: "#60a5fa",
-    C: "#d196f3",
-    D: "#fb923c",
-    E: "#facc15"
+    A: rootStyles.getPropertyValue('--team-a-color').trim(),
+    B: rootStyles.getPropertyValue('--team-b-color').trim(),
+    C: rootStyles.getPropertyValue('--team-c-color').trim(),
+    D: rootStyles.getPropertyValue('--team-d-color').trim(),
+    E: rootStyles.getPropertyValue('--team-e-color').trim()
 };
 
 const daySequence = ["A", "B", "A", "E", "B"];
@@ -39,6 +40,78 @@ const fixedHolidays = [
 const municipalHolidays = [
     { month: 0, day: 25, name: "Aniversário de São Paulo" }
 ];
+
+function marcarQuintoDiaUtil() {
+    const dias = document.querySelectorAll('.calendar-cell');
+    let diasUteisContados = 0;
+    let paymentDayMarked = false;
+
+    for (let i = 0; i < dias.length; i++) {
+        const cell = dias[i];
+        // Verifica se a célula contém número de dia, para evitar células vazias
+        const dayNumberDiv = cell.querySelector('.day-number');
+        if (!dayNumberDiv) continue;
+
+        const dayText = dayNumberDiv.textContent;
+        if (!dayText) continue;
+
+        // Verifica se a célula é sábado, domingo ou feriado
+        const isSaturday = cell.classList.contains('saturday');
+        const isSunday = cell.classList.contains('sunday');
+        const isHoliday = cell.classList.contains('holiday');
+
+        // Se não for sábado, domingo ou feriado, conta como dia útil
+        if (!isSaturday && !isSunday && !isHoliday) {
+            diasUteisContados++;
+            if (diasUteisContados === 5 && !paymentDayMarked) {
+                paymentDayMarked = true;
+                cell.classList.add('payment-day');
+                break;
+            }
+        }
+    }
+}
+
+// Função para encontrar o 5º dia útil e adicionar tooltip
+function setupTooltipFifthBusinessDay() {
+  const calendarCells = document.querySelectorAll('.calendar-cell');
+  let businessDayCount = 0;
+
+  calendarCells.forEach(cell => {
+    // Suponha que dia útil não seja domingo (sunday) e nem feriado (holiday)
+    if (!cell.classList.contains('sunday') && !cell.classList.contains('holiday')) {
+      businessDayCount++;
+      if (businessDayCount === 5) {
+        // Adiciona tooltip no 5º dia útil
+        const dayDetails = cell.querySelector('.day-details');
+        if (dayDetails) {
+          // Cria o elemento tooltip
+          const tooltip = document.createElement('div');
+          tooltip.classList.add('tooltip-bottom');
+          tooltip.textContent = 'Dia de pagamento';
+
+          dayDetails.appendChild(tooltip);
+
+          // Eventos para mostrar/esconder tooltip
+          cell.addEventListener('mouseenter', () => {
+            cell.classList.add('tooltip-active');
+          });
+
+          cell.addEventListener('mouseleave', () => {
+            cell.classList.remove('tooltip-active');
+          });
+        }
+      }
+    }
+  });
+}
+
+// Chama a função após o carregamento do calendário
+document.addEventListener('DOMContentLoaded', () => {
+  setupTooltipFifthBusinessDay();
+});
+
+
 
 // Cálculo da Páscoa e feriados móveis
 function calculateEaster(year) {
@@ -274,6 +347,10 @@ function renderCalendar() {
         const cell = document.createElement("div");
         cell.classList.add("calendar-cell");
 
+        if (currentDate.getDay() === 6) {
+            cell.classList.add("saturday");
+        }
+
         if (currentDate.getDay() === 0) {
             cell.classList.add("sunday");
         }
@@ -383,6 +460,7 @@ function renderCalendar() {
         nextMonth.style.display = "inline-block";
         nextMonthName.style.display = "inline-block";
     }
+    marcarQuintoDiaUtil();
 }
 
 

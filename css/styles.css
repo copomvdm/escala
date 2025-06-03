@@ -1,5 +1,41 @@
+:root {
+    --color-background: #f8fafc; /* cinza claro suave */
+    --color-primary: #2c3e50; /* azul petróleo */
+    --color-primary-hover: #3a5873; /* azul petróleo claro */
+    --color-light-gray: #b0b8bf; /* cinza médio */
+    --color-medium-gray: #d3d9df; /* cinza claro */
+    --color-dark-gray: #4a4f54; /* cinza escuro */
+    --color-text: #222831; /* quase preto para texto principal */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-shadow: rgba(0, 0, 0, 0.2); /* sombra sutil */
+    --color-shadow-hover: rgba(0, 0, 0, 0.33); /* sombra hover mais forte */
+    --color-sunday-bg: #ffeef0; /* rosa pálido */
+    --color-sunday-text: #d94f5d; /* vermelho suave */
+    --color-holiday-bg: #fff9e6; /* creme claro */
+    --color-holiday-border: #d4af37; /* dourado */
+    --color-holiday-text: #8d0303; /* verde escuro */
+    --color-current-day-bg: #d7e9f7; /* azul claro suave */
+    --color-current-day-border: #2c3e50; /* azul petróleo */
+    --color-today-label-bg: #ee0a78; /* rosa vibrante */
+    --color-team-button-bg: #dfe4ea; /* cinza claro */
+    --color-sun: #f1c40f; /* amarelo sol mais moderno */
+    --color-moon: #7f8c8d; /* cinza azulado */
+    --color-tooltip: #047857; /*Verde água */
+
+    /* Cores dos times */
+    --team-a-color: #28a745; /* verde mais sóbrio */
+    --team-b-color: #2980b9; /* azul petróleo */
+    --team-c-color: #8e44ad; /* roxo escuro */
+    --team-d-color: #e67e22; /* laranja moderno */
+    --team-e-color: #f1c40f; /* amarelo mostarda */
+}
+
+
+/* Começa o CSS principal com variáveis aplicadas */
+
 body {
-    background-color: #f0f2f5;
+    background-color: var(--color-background);
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
@@ -11,7 +47,7 @@ body {
     font-size: 2rem;
     margin-top: 20px;
     margin-bottom: 20px;
-    color: #4a90e2;
+    color: var(--color-primary);
     font-weight: bold;
 }
 
@@ -19,9 +55,9 @@ body {
     max-width: 1200px;
     margin: -10px auto;
     padding: 20px;
-    background: white;
+    background: var(--color-white);
     border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px var(--color-shadow);
 }
 
 .calendar-header {
@@ -30,18 +66,14 @@ body {
     align-items: center;
     margin-bottom: 20px;
     padding: 10px 20px;
-    background-color: #e9ecef;
-    /* Um cinza claro */
+    background-color: var(--color-light-gray);
     border-radius: 10px;
-    color: #333;
-    /* Texto cinza escuro */
+    color: var(--color-text);
     position: sticky;
     top: 0;
     z-index: 3;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    /* Leve sombra */
+    box-shadow: 0px 2px 5px var(--color-shadow);
 }
-
 
 .calendar-header h2 {
     font-size: 1.5rem;
@@ -54,8 +86,8 @@ body {
     font-size: 1rem;
     border-radius: 5px;
     border: none;
-    background-color: #ffffff;
-    color: #4a90e2;
+    background-color: var(--color-white);
+    color: var(--color-primary);
     font-weight: bold;
     user-select: none;
 }
@@ -70,15 +102,14 @@ body {
     font-weight: bold;
     text-align: center;
     padding: 10px;
-    background-color: #e9ecef;
+    background-color: var(--color-light-gray);
     border-radius: 5px;
-    color: #555;
+    color: var(--color-dark-gray);
     text-transform: uppercase;
     position: sticky;
     top: 63px;
-    /* Espaçamento abaixo do mês/ano */
     z-index: 2;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 5px var(--color-shadow);
 }
 
 .calendar-cell {
@@ -94,7 +125,6 @@ body {
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-sizing: border-box;
     min-height: 100px;
-    /* Altura mínima garantida */
 }
 
 .calendar-cell:hover {
@@ -105,10 +135,8 @@ body {
 .calendar-cell .day-number {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #4a90e2;
+    color: var(--color-primary);
     margin-bottom: 5px;
-    /* Espaço entre o número e o nome do feriado */
-
 }
 
 .calendar-cell .day-details {
@@ -116,8 +144,8 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    /* Define o espaço entre "Dia" e "Noite" */
     font-size: 0.85rem;
+    position: relative;
 }
 
 .calendar-cell .day-text,
@@ -131,40 +159,35 @@ body {
 }
 
 .calendar-cell .day-text {
-    color: black;
+    color: #1f54a3;
     flex: 1;
     text-align: center;
 }
 
 .calendar-cell .night-text {
-    color: rgb(151, 44, 44);
+    color: #791d1d;
     flex: 1;
     text-align: center;
 }
 
 .highlighted {
-    color: black !important;
+    color: var(--color-black) !important;
     background-color: var(--team-color) !important;
     font-weight: bold !important;
 }
 
 .sunday {
-    background-color: #ffe6e6 !important;
-    color: #ff4d4d !important;
+    background-color: var(--color-sunday-bg) !important;
+    color: var(--color-sunday-text) !important;
 }
 
 .current-day {
-    background-color: #f0f8ff;
-    /* Um azul claro, mais sutil */
-    color: #333;
-    /* Texto em cinza escuro para contraste */
-    border: 1px solid #add8e6;
-    /* Uma borda azul clara */
+    background-color: var(--color-current-day-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-current-day-border);
     font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Um leve efeito de sombra */
+    box-shadow: 0 2px 4px var(--color-shadow);
 }
-
 
 .team-buttons {
     display: flex;
@@ -178,7 +201,7 @@ body {
     text-align: center;
     font-size: 2.7rem;
     font-weight: bold;
-    color: #ffffff;
+    color: var(--color-white);
     background-color: #424242;
     margin: 10px 0 20px;
 }
@@ -189,27 +212,26 @@ body {
     font-size: 1rem;
     border-radius: 10px;
     font-weight: 600;
-    color: black;
-    background-color: #e0e0e0;
+    color: var(--color-black);
+    background-color: var(--color-team-button-bg);
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--color-shadow);
 }
 
 .team-button.active {
-    color: black; /* Alterado para preto */
-    background-color: var(--team-color); /* Mantém a cor de fundo */
+    color: var(--color-black);
+    background-color: var(--team-color);
 }
-
 
 .team-button:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px var(--color-shadow-hover);
 }
 
 .nav-button {
-    background-color: #4a90e2;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
     border: none;
     padding: 8px 12px;
     font-size: 1rem;
@@ -219,7 +241,7 @@ body {
 }
 
 .nav-button:hover {
-    background-color: #357ab7;
+    background-color: var(--color-primary-hover);
     transform: scale(1.1);
 }
 
@@ -235,36 +257,24 @@ body {
 }
 
 .holiday {
-    background-color: #f7f0e5;
-    /* Fundo laranja claro */
-    border: 1px solid #ffa500;
-    /* Borda laranja */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.day-number {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #4a90e2;
-    margin-bottom: 5px;
-    /* Espaço entre o número e o nome do feriado */
+    background-color: var(--color-holiday-bg);
+    border: 1px solid var(--color-holiday-border);
+    box-shadow: 0 2px 4px var(--color-shadow);
 }
 
 .holiday-name {
     font-size: 0.85rem;
     font-weight: bold;
-    color: #03852e;
-    /* Texto laranja escuro */
+    color: var(--color-holiday-text);
     margin-bottom: 10px;
     margin-top: 5px;
-    /* Espaço entre o nome do feriado e os detalhes do dia */
 }
 
 .today-label {
     font-size: 0.9rem;
     font-weight: bold;
-    color: #ffffff;
-    background-color: #ff2c84;
+    color: var(--color-white);
+    background-color: var(--color-today-label-bg);
     padding: 2px 6px;
     border-radius: 5px;
     margin-top: 5px;
@@ -274,42 +284,33 @@ body {
 .page-footer {
     text-align: center;
     padding: 10px;
-    background-color: #e9ecef; /* Um cinza claro */
-    color: #555; /* Texto em cinza escuro */
+    background-color: var(--color-light-gray);
+    color: var(--color-dark-gray);
     font-size: 0.9rem;
     font-weight: 500;
-    border-top: 1px solid #dcdcdc; /* Borda sutil no topo */
+    border-top: 1px solid var(--color-medium-gray);
     margin-top: 20px;
 }
 
 .estatistica {
     margin-top: 20px;
     padding: 15px;
-    background-color: #e9ecef;
-    /* Fundo cinza claro */
+    background-color: var(--color-light-gray);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Sombra sutil */
-    color: #333;
-    /* Texto cinza escuro */
+    box-shadow: 0 4px 8px var(--color-shadow);
+    color: var(--color-text);
     font-size: 1rem;
-    /* Tamanho da fonte */
     font-weight: 500;
-    /* Peso da fonte */
     line-height: 1.5;
-    /* Espaçamento entre linhas */
     max-width: 800px;
-    /* Largura máxima */
     margin-left: auto;
     margin-right: auto;
-    /* Centraliza */
 }
 
 .estatistica h3 {
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: #4a90e2;
-    /* Azul do título */
+    color: var(--color-primary);
     text-align: center;
     font-weight: 700;
 }
@@ -321,29 +322,24 @@ body {
     align-items: center;
     padding: 8px 10px;
     border-radius: 8px;
-    background-color: #fff;
-    /* Fundo branco para contraste */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white);
+    box-shadow: 0 2px 4px var(--color-shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .estatistica div:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    /* Efeito de hover */
+    box-shadow: 0 4px 8px var(--color-shadow-hover);
 }
 
 .estatistica div span {
     font-size: 1rem;
     font-weight: 600;
-    /* Peso do texto */
-    color: #555;
-    /* Texto cinza */
+    color: var(--color-dark-gray);
 }
 
 .estatistica div span.team {
-    color: #4a90e2;
-    /* Azul para o nome da equipe */
+    color: var(--color-primary);
 }
 
 .prev-container {
@@ -351,25 +347,24 @@ body {
     align-items: center;
     gap: 8px;
     visibility: visible;
-    width: 120px; /* Define um tamanho fixo para todo o container */
-    justify-content: flex-end; /* Alinha o botão e o texto à direita */
+    width: 120px;
+    justify-content: flex-end;
 }
 
 .prev-container.hidden {
-    visibility: hidden; /* Oculta os elementos sem alterar o layout */
+    visibility: hidden;
 }
-
 
 .month-name {
     font-size: 0.9rem;
-    color: #555;
+    color: var(--color-dark-gray);
     font-weight: 500;
     text-transform: capitalize;
-    width: 80px; /* Largura fixa para o texto */
-    text-align: left; /* Alinha o texto à esquerda */
+    width: 80px;
+    text-align: left;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis; /* Trunca texto longo */
+    text-overflow: ellipsis;
 }
 
 .next-container {
@@ -378,32 +373,24 @@ body {
     gap: 8px;
 }
 
-.month-name {
-    font-size: 0.9rem;
-    color: #555;
-    font-weight: 500;
-    text-transform: capitalize;
-}
-
 .date-text {
     font-family: 'Poppins', sans-serif;
 }
 
 .sun-icon {
-    color: #f7d343; /* Amarelo sol */
+    color: var(--color-sun);
     font-size: 1.1rem;
     animation: rotate-sun 5s linear infinite;
     margin-bottom: 5px;
 }
 
 .moon-icon {
-    color: #b0c4de; /* Prata, para a lua */
+    color: var(--color-moon);
     font-size: 1.1rem;
     animation: move-moon 2s ease-in-out infinite;
     margin-bottom: 5px;
 }
 
-/* Animação para o sol girar levemente */
 @keyframes rotate-sun {
     0% {
         transform: rotate(0deg);
@@ -413,17 +400,94 @@ body {
     }
 }
 
-/* Animação para a lua mover-se suavemente para cima e para baixo */
 @keyframes move-moon {
     0% {
-        transform: translateY(0); /* Posição inicial */
+        transform: translateY(0);
     }
     50% {
-        transform: translateY(-5px); /* Movimento para cima */
+        transform: translateY(-5px);
     }
     100% {
-        transform: translateY(0); /* Retorno para a posição inicial */
+        transform: translateY(0);
     }
 }
 
+.payment-day {
+    position: relative;
+}
+
+.payment-day::after {
+    content: "💰";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 1.3rem;
+    color: #047857; /* Verde escuro */
+    user-select: none;
+    pointer-events: none;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+
+/* Criando o tooltip */
+.payment-day:hover::before {
+    content: "Dia de pagamento";
+    position: absolute;
+    top: 47px;
+    right: 16px;
+    background-color: var(--color-tooltip);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 1;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+}
+
+/* Tooltip inicial invisível */
+.payment-day::before {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+/* Animação pulse suave */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+}
+
+/* Tooltip básico, escondido por padrão */
+.tooltip-bottom {
+  position: absolute;
+  bottom: -35px; /* posiciona logo abaixo dos spans */
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background-color: #047857;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 999;
+}
+
+/* Tooltip visível com animação */
+.calendar-cell.tooltip-active .tooltip-bottom {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
 
