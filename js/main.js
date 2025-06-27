@@ -20,11 +20,20 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentDate = new Date();
     const highlightedTeams = new Set();
     let headerOffsetTop = 0;
+    
+    // --- LÓGICA DE CONTROLE DE NAVEGAÇÃO ---
+    let updateNavButtonStates = () => {}; 
 
     // --- DADOS E CONSTANTES ---
     const config = {
         months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-        teamColors: { A: '#27ae60', B: '#2980b9', C: '#8e44ad', D: '#f39c12', E: '#c0392b' },
+        teamColors: {
+            A: { bg: '#a7f3d0', text: '#065f46' }, // Verde Menta | Texto Verde Escuro
+            B: { bg: '#bfdbfe', text: '#1e40af' }, // Azul Céu | Texto Azul Escuro
+            C: { bg: '#ddd6fe', text: '#5b21b6' }, // Lavanda | Texto Roxo Escuro
+            D: { bg: '#fed7aa', text: '#9a3412' }, // Pêssego | Texto Laranja Escuro
+            E: { bg: '#fef08a', text: '#854d0e' }  // Amarelo Baunilha | Texto Amarelo Queimado
+        },
         daySequence: ["A", "B", "A", "E", "B"],
         nightSequence: ["E", "C", "D", "C", "D"],
         baseDate: new Date(2025, 0, 1),
@@ -112,14 +121,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     ${paymentIcon}
                 </div>
                 <div class="day-details">
-                    <div class="schedule-entry">
+                    <div class="schedule-entry" data-team="${dayTeam}">
                         <i class="fas fa-sun animated-sun"></i>
-                        <span class="team-pill" data-team="${dayTeam}"></span>
                         <span>Dia: ${dayTeam}</span>
                     </div>
-                    <div class="schedule-entry">
+                    <div class="schedule-entry" data-team="${nightTeam}">
                         <i class="fas fa-moon animated-moon"></i>
-                        <span class="team-pill" data-team="${nightTeam}"></span>
                         <span>Noite: ${nightTeam}</span>
                     </div>
                 </div>
@@ -141,15 +148,12 @@ document.addEventListener("DOMContentLoaded", () => {
         let cells = [];
         let businessDayCounter = { count: 0 };
 
-        // Dias do mês anterior
         const prevMonth = new Date(year, month, 0);
         const daysInPrevMonth = prevMonth.getDate();
         for (let i = firstDayOfMonth; i > 0; i--) {
-            const day = daysInPrevMonth - i + 1;
-            cells.push(createCellHTML(new Date(prevMonth.getFullYear(), prevMonth.getMonth(), day), false, {count: -1})); // Não conta dia útil
+            cells.push(createCellHTML(new Date(prevMonth.getFullYear(), prevMonth.getMonth(), daysInPrevMonth - i + 1), false, {count: -1}));
         }
 
-        // Dias do mês atual
         for (let day = 1; day <= daysInMonth; day++) {
             const cellDate = new Date(year, month, day);
             const { dayTeam, nightTeam } = getTeamForDate(new Date(cellDate));
@@ -158,9 +162,8 @@ document.addEventListener("DOMContentLoaded", () => {
             cells.push(createCellHTML(cellDate, true, businessDayCounter));
         }
 
-        // Dias do próximo mês
         const totalCells = firstDayOfMonth + daysInMonth;
-        const remainingCells = (totalCells % 7 === 0) ? 0 : 7 - (totalCells % 7);
+        const remainingCells = totalCells > 35 ? 42 - totalCells : 35 - totalCells;
         const nextMonth = new Date(year, month + 1, 1);
         for (let i = 1; i <= remainingCells; i++) {
             cells.push(createCellHTML(new Date(nextMonth.getFullYear(), nextMonth.getMonth(), i), false, {count: -1}));
@@ -172,32 +175,55 @@ document.addEventListener("DOMContentLoaded", () => {
         updateMonthNav();
         updateHighlights();
         
+        // Chama a função que oculta ou mostra os botões de navegação
+        updateNavButtonStates();
+        
         setTimeout(() => {
             if (elements.calendarGridHeader) {
                 headerOffsetTop = elements.calendarGridHeader.offsetTop;
             }
         }, 100);
     };
-
+    
+    const triggerHighlightAnimation = (team) => {
+        const entries = document.querySelectorAll(`.schedule-entry[data-team="${team}"]`);
+        entries.forEach(entry => {
+            entry.classList.add('highlight-animation');
+            entry.addEventListener('animationend', () => {
+                entry.classList.remove('highlight-animation');
+            }, { once: true });
+        });
+    };
+    
     const updateHighlights = () => {
-        document.querySelectorAll('.team-pill').forEach(pill => {
-            const team = pill.dataset.team;
+        document.querySelectorAll('.schedule-entry').forEach(entry => {
+            const team = entry.dataset.team;
+            const icon = entry.querySelector('i');
+            const teamStyle = config.teamColors[team];
+
             if (highlightedTeams.has(team)) {
-                pill.classList.add('active-pill');
-                pill.style.setProperty('--team-color', config.teamColors[team]);
+                entry.style.backgroundColor = teamStyle.bg;
+                entry.style.color = teamStyle.text;
+                if (icon) icon.style.color = teamStyle.text;
             } else {
-                pill.classList.remove('active-pill');
-                pill.style.removeProperty('--team-color');
+                entry.style.backgroundColor = '';
+                entry.style.color = '';
+                if (icon) {
+                    icon.style.color = ''; 
+                }
             }
         });
+
         document.querySelectorAll('.team-button').forEach(button => {
             const team = button.dataset.team;
             if (highlightedTeams.has(team)) {
                 button.classList.add('active');
-                button.style.setProperty('--team-color', config.teamColors[team]);
+                button.style.setProperty('--team-bg-color', config.teamColors[team].bg);
+                button.style.setProperty('--team-text-color', config.teamColors[team].text);
             } else {
                 button.classList.remove('active');
-                button.style.removeProperty('--team-color');
+                button.style.removeProperty('--team-bg-color');
+                button.style.removeProperty('--team-text-color');
             }
         });
     };
@@ -205,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const renderStatistics = (teamWorkDays) => {
         let html = '';
         Object.entries(teamWorkDays).forEach(([team, count]) => {
-            html += `<div class="statistic-item" style="border-color: ${config.teamColors[team]}"><span class="team">Equipe ${team}</span> <span>${count} plantões</span></div>`;
+            html += `<div class="statistic-item" style="border-color: ${config.teamColors[team].bg}"><span class="team">Equipe ${team}</span> <span>${count} plantões</span></div>`;
         });
         elements.estatisticaContainer.innerHTML = html;
     };
@@ -236,19 +262,47 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const init = () => {
-        const currentYear = new Date().getFullYear();
+        // Define os anos permitidos
+        const startYear = new Date().getFullYear();
+        const endYear = startYear + 2;
         
-        elements.yearSelect.innerHTML = Array.from({length: 3}, (_, i) => currentYear + i)
+        // Popula o seletor de anos com o intervalo correto
+        elements.yearSelect.innerHTML = Array.from({length: 3}, (_, i) => startYear + i)
             .map(y => `<option value="${y}">${y}</option>`).join('');
 
+        // Popula o seletor de meses
         elements.monthSelect.innerHTML = config.months.map((m, i) => `<option value="${i}">${m}</option>`).join('');
         
         currentDate = new Date();
+
+        // --- FUNÇÃO DE CONTROLE DE NAVEGAÇÃO ---
+        updateNavButtonStates = () => {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Verifica se está no primeiro mês do primeiro ano
+            const isAtStart = year <= startYear && month === 0;
+            // Verifica se está no último mês do último ano
+            const isAtEnd = year >= endYear && month === 11;
+
+            // Adiciona ou remove a classe 'disabled' (que oculta o botão via CSS)
+            elements.prevMonthBtn.classList.toggle('disabled', isAtStart);
+            elements.nextMonthBtn.classList.toggle('disabled', isAtEnd);
+        };
+        
         renderCalendar();
 
         // --- EVENT LISTENERS ---
-        elements.prevMonthBtn.addEventListener("click", (e) => { e.preventDefault(); currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
-        elements.nextMonthBtn.addEventListener("click", (e) => { e.preventDefault(); currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
+        elements.prevMonthBtn.addEventListener("click", (e) => { 
+            e.preventDefault(); 
+            currentDate.setMonth(currentDate.getMonth() - 1); 
+            renderCalendar(); 
+        });
+        elements.nextMonthBtn.addEventListener("click", (e) => { 
+            e.preventDefault(); 
+            currentDate.setMonth(currentDate.getMonth() + 1); 
+            renderCalendar(); 
+        });
         elements.todayButton.addEventListener("click", () => { currentDate = new Date(); renderCalendar(); });
         elements.monthSelect.addEventListener("change", () => { currentDate.setFullYear(elements.yearSelect.value, elements.monthSelect.value, 1); renderCalendar(); });
         elements.yearSelect.addEventListener("change", () => { currentDate.setFullYear(elements.yearSelect.value, elements.monthSelect.value, 1); renderCalendar(); });
@@ -260,6 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     highlightedTeams.delete(team);
                 } else {
                     highlightedTeams.add(team);
+                    triggerHighlightAnimation(team);
                 }
                 updateHighlights();
             }
@@ -267,7 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         window.addEventListener('scroll', handleStickyHeader);
 
-        elements.themeToggle.addEventListener('change', () => {
+        elements.themeToggle.addEventListener("change", () => {
             const newTheme = elements.themeToggle.checked ? 'dark' : 'light';
             localStorage.setItem('theme', newTheme);
             applyTheme(newTheme);

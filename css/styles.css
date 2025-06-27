@@ -75,12 +75,10 @@ body.dark-mode {
 @keyframes sun-animation {
     0%, 100% {
         transform: rotate(0deg);
-        color: #f1c40f;
     }
 
     50% {
         transform: rotate(15deg);
-        color: #f39c12;
     }
 }
 
@@ -115,6 +113,41 @@ body.dark-mode {
         transform: translateY(0) rotate(0);
     }
 }
+
+/* Animação de realce para as equipes */
+@keyframes highlight-animation {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
+/* --- NOVA ANIMAÇÃO ADICIONADA --- */
+@keyframes notice-icon-animation {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+    }
+    10%, 30% {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    20%, 40% {
+        transform: scale(1.1) rotate(5deg);
+    }
+    50% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
 
 body {
     background-color: var(--color-background);
@@ -218,6 +251,40 @@ input:checked+.slider:before {
     transform: translateX(24px);
 }
 
+/* --- NOVOS ESTILOS ADICIONADOS --- */
+.highlight-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 2rem;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--color-shadow);
+}
+
+.highlight-notice .notice-icon-animated {
+    font-size: 1.25rem;
+    color: var(--color-accent);
+    animation: notice-icon-animation 3s ease-in-out infinite;
+}
+
+.highlight-notice p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.highlight-notice p strong {
+    color: var(--color-text-primary);
+    font-weight: 700;
+}
+
+
 .team-buttons {
     display: flex;
     justify-content: center;
@@ -246,11 +313,11 @@ input:checked+.slider:before {
 }
 
 .team-button.active {
-    color: var(--color-text-on-primary);
-    background-color: var(--team-color);
-    border-color: var(--team-color);
+    color: var(--team-text-color); /* Usa a variável da cor do texto */
+    background-color: var(--team-bg-color); /* Usa a variável da cor de fundo */
+    border-color: var(--team-bg-color); /* Usa a variável da cor de fundo */
     transform: translateY(-1px);
-    box-shadow: 0 2px 10px var(--team-color);
+    box-shadow: 0 2px 10px var(--team-bg-color);
 }
 
 .calendar-container {
@@ -279,11 +346,16 @@ input:checked+.slider:before {
     text-decoration: none;
     padding: 0.5rem;
     border-radius: var(--border-radius-sm);
-    transition: background-color var(--transition-speed) ease;
+    transition: background-color var(--transition-speed) ease, opacity var(--transition-speed) ease;
 }
 
 .nav-control:hover {
     background-color: var(--color-background);
+}
+
+/* --- ESTILO PARA OCULTAR O BOTÃO --- */
+.nav-control.disabled {
+    display: none;
 }
 
 .month-year-selector select {
@@ -380,7 +452,6 @@ body.dark-mode .month-year-selector select {
     z-index: 15;
 }
 
-/* Garante que a célula sob o mouse fique acima do header */
 .calendar-cell:nth-child(7n) {
     border-right: none;
 }
@@ -422,16 +493,24 @@ body.dark-mode .month-year-selector select {
     align-items: center;
     gap: 0.5rem;
     font-size: 0.85rem;
-    padding: 2px 4px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
+    padding: 3px 8px;
+    /* Mais preenchimento para parecer um "chip" */
+    border-radius: var(--border-radius-sm);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.schedule-entry.highlight-animation {
+    animation: highlight-animation 0.6s ease-in-out;
 }
 
 .schedule-entry i {
     font-size: 0.9rem;
+    transition: color 0.3s ease;
 }
 
 .animated-sun {
+    color: #f1c40f; /* Cor padrão do sol */
     animation: sun-animation 4s ease-in-out infinite;
 }
 
@@ -440,23 +519,9 @@ body.dark-mode .month-year-selector select {
     animation: moon-animation 3s ease-in-out infinite;
 }
 
-.team-pill {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: var(--color-border);
-    flex-shrink: 0;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.team-pill.active-pill {
-    background-color: var(--team-color);
-    transform: scale(1.3);
-}
-
 /* --- MARCADORES E TOOLTIPS --- */
 .today-marker {
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--color-today-marker-text);
     background-color: var(--color-today-marker-bg);
@@ -544,6 +609,7 @@ body.dark-mode .payment-icon::after, body.dark-mode .special-date-marker::after 
     color: var(--color-text-on-primary);
     background-color: var(--color-accent);
 }
+
 .day-number {
     font-size: 1.3rem;
 }
