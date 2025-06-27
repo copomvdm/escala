@@ -544,6 +544,9 @@ body.dark-mode .payment-icon::after, body.dark-mode .special-date-marker::after 
     color: var(--color-text-on-primary);
     background-color: var(--color-accent);
 }
+.day-number {
+    font-size: 1.3rem;
+}
 
 .payment-icon {
     color: #1e8e3e;
