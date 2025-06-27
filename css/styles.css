@@ -353,7 +353,6 @@ input:checked+.slider:before {
     background-color: var(--color-background);
 }
 
-/* --- ESTILO PARA OCULTAR O BOTÃO --- */
 .nav-control.disabled {
     display: none;
 }
@@ -400,6 +399,22 @@ body.dark-mode .month-year-selector select {
     color: var(--color-text-on-primary);
     border-color: var(--color-primary);
 }
+
+/* --- ESTILO DO NOVO CABEÇALHO DO MÊS --- */
+.current-month-header {
+    background-color: var(--color-primary);
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+}
+
+.current-month-header h2 {
+    margin: 0;
+    color: var(--color-text-on-primary);
+    font-family: var(--font-secondary);
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
 
 .calendar-grid-header {
     display: grid;

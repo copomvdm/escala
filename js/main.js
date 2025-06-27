@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
         estatisticaContainer: document.getElementById("estatisticaContainer"),
         calendarGridHeader: document.getElementById("calendarGridHeader"),
         themeToggle: document.getElementById("theme-toggle"),
+        // NOVO ELEMENTO ADICIONADO
+        currentMonthYear: document.getElementById("currentMonthYear"), 
     };
 
     // --- ESTADO DA APLICAÇÃO ---
@@ -138,6 +140,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth();
         const teamWorkDays = Object.fromEntries(Object.keys(config.teamColors).map(key => [key, 0]));
+
+        // ATUALIZA O CABEÇALHO DO MÊS
+        elements.currentMonthYear.textContent = `${config.months[month]} de ${year}`;
 
         elements.monthSelect.value = month;
         elements.yearSelect.value = year;
