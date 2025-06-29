@@ -444,7 +444,7 @@ body.dark-mode .month-year-selector select {
     padding: 0.75rem 0.25rem;
     font-weight: 600;
     color: var(--color-text-secondary);
-    font-size: 0.75rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
     border-bottom: 1px solid var(--color-border);
     background-color: var(--color-day-header-bg);
