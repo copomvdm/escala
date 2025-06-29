@@ -444,7 +444,9 @@ body.dark-mode .month-year-selector select {
     padding: 0.75rem 0.25rem;
     font-weight: 600;
     color: var(--color-text-secondary);
-    font-size: 1.1rem;
+    /* INÍCIO DA ALTERAÇÃO: Ajuste de fonte para melhor responsividade */
+    font-size: 0.8rem;
+    /* FIM DA ALTERAÇÃO */
     text-transform: uppercase;
     border-bottom: 1px solid var(--color-border);
     background-color: var(--color-day-header-bg);
@@ -505,6 +507,13 @@ body.dark-mode .month-year-selector select {
     font-size: 0.9rem;
     color: var(--color-text-primary);
 }
+
+/* INÍCIO DA ALTERAÇÃO: Esconde o nome do dia por padrão (visível só no mobile) */
+.day-name {
+    display: none;
+}
+/* FIM DA ALTERAÇÃO */
+
 
 .day-details {
     margin-top: 0.5rem;
@@ -574,7 +583,6 @@ body.dark-mode .month-year-selector select {
     position: relative;
 }
 
-/* --- INÍCIO DA ALTERAÇÃO: Tooltip CSS apenas para datas especiais --- */
 .special-date-marker::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -607,23 +615,20 @@ body.dark-mode .special-date-marker::after {
     color: var(--color-tooltip-bg);
     background-color: var(--color-text-on-primary);
 }
-/* --- FIM DA ALTERAÇÃO --- */
 
-
-/* --- INÍCIO DA ALTERAÇÃO: Novo estilo para o Tooltip de Pagamento (controlado por JS) --- */
 .payment-tooltip {
-    position: fixed; /* Fixo na tela para escapar do z-index do calendário */
-    display: none; /* Começa escondido */
+    position: fixed;
+    display: none; 
     background-color: var(--color-tooltip-bg);
     color: var(--color-text-on-primary);
     padding: 10px 15px;
     border-radius: var(--border-radius-md);
     font-size: 0.9rem;
     font-family: var(--font-primary);
-    z-index: 2000; /* Z-index muito alto para garantir que fique acima de tudo */
-    pointer-events: none; /* Para não interferir com o mouse */
-    transform: translate(-50%, -100%); /* Centraliza e posiciona acima do ícone */
-    margin-top: -8px; /* Pequeno espaçamento */
+    z-index: 2000;
+    pointer-events: none;
+    transform: translate(-50%, -100%); 
+    margin-top: -8px;
     white-space: nowrap;
     transition: opacity 0.2s ease;
 }
@@ -632,7 +637,6 @@ body.dark-mode .payment-tooltip {
     color: var(--color-tooltip-bg);
     background-color: var(--color-text-on-primary);
 }
-/* --- FIM DA ALTERAÇÃO --- */
 
 
 .calendar-cell.national-holiday .special-date-marker {
@@ -824,33 +828,104 @@ body.dark-mode .payment-tooltip {
     }
 }
 
-@media (max-width: 768px) {
-    body {
-        padding: 0.5rem;
+/* INÍCIO DA ATUALIZAÇÃO: Novas regras para telas menores que 677px */
+@media (max-width: 725px) {
+    .calendar-grid-header {
+        display: none;
     }
 
-    .container {
-        padding: 0;
-    }
-
-    .calendar-container {
-        border-radius: 0;
-    }
-
-    .calendar-nav {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .month-year-selector {
-        order: -1;
-        margin-bottom: 0.5rem;
+    .calendar-grid {
+        display: block;
+        border-top: none;
     }
 
     .calendar-cell {
-        min-height: 120px;
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        grid-template-areas: "date details";
+        align-items: center;
+        min-height: auto;
+        padding: 0.75rem;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .calendar-cell:last-child {
+        border-bottom: none;
+    }
+
+    .calendar-cell.other-month {
+        display: none;
+    }
+
+    .day-number-wrapper {
+        grid-area: date;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        font-weight: 700;
+    }
+    
+    .day-name {
+        display: block;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+    
+    .day-number {
+        font-size: 1.6rem;
+    }
+
+    .day-details {
+        grid-area: details;
+        margin-top: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .schedule-entry {
+        font-size: 0.9rem;
+    }
+
+    .special-date-marker {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        margin-top: 0;
+        padding: 2px 5px;
+        font-size: 0.6rem;
+        max-width: 45%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .payment-icon {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+    }
+
+    .today-marker {
+        display: none;
+    }
+
+    .current-day {
+        border-left: 4px solid var(--color-accent);
+        padding-left: calc(0.75rem - 4px);
+    }
+
+    .current-day .day-number {
+        background: none;
+        color: var(--color-accent);
+        width: auto;
+        height: auto;
+        border-radius: 0;
     }
 }
+/* FIM DA ATUALIZAÇÃO */
+
 
 @media (max-width: 480px) {
     .team-buttons {
