@@ -12,22 +12,25 @@ document.addEventListener("DOMContentLoaded", () => {
         nextMonthNameEl: document.getElementById("nextMonthName"),
         teamButtonsContainer: document.querySelector(".team-buttons"),
         estatisticaContainer: document.getElementById("estatisticaContainer"),
-        calendarGridHeader: document.getElementById("calendarGridHeader"),
+        stickyHeaderContainer: document.getElementById("stickyHeaderContainer"),
         themeToggle: document.getElementById("theme-toggle"),
         currentMonthYear: document.getElementById("currentMonthYear"),
-        // INÍCIO: NOVOS ELEMENTOS DO MODAL
         modal: document.getElementById("specialDateModal"),
         modalTitle: document.getElementById("modalTitle"),
         modalSummary: document.getElementById("modalSummary"),
         modalMotivation: document.getElementById("modalMotivation"),
         modalCloseBtn: document.querySelector(".modal-close-btn"),
-        // FIM: NOVOS ELEMENTOS DO MODAL
+        paymentTooltip: document.getElementById('paymentTooltip'),
     };
 
     // --- ESTADO DA APLICAÇÃO ---
     let currentDate = new Date();
     const highlightedTeams = new Set();
     let headerOffsetTop = 0;
+    // INÍCIO DA ATUALIZAÇÃO: Variáveis para controlar a animação do tooltip
+    let tooltipAnimationId = null;
+    let hoveredIcon = null;
+    // FIM DA ATUALIZAÇÃO
 
     // --- LÓGICA DE CONTROLE DE NAVEGAÇÃO ---
     let updateNavButtonStates = () => { };
@@ -269,7 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        // --- INÍCIO: ALTERAÇÃO NA CRIAÇÃO DO MARCADOR DE DATA ESPECIAL ---
         const specialDateMarker = specialDate ?
             `<div class="special-date-marker" data-tooltip="${config.specialDateTypes[specialDate.type]}">
                 ${specialDate.name}
@@ -279,7 +281,6 @@ document.addEventListener("DOMContentLoaded", () => {
                    data-motivation="${specialDate.motivation}"></i>
             </div>` :
             '';
-        // --- FIM: ALTERAÇÃO ---
 
         return `
             <div class="${cellClasses} animate-in">
@@ -357,8 +358,8 @@ document.addEventListener("DOMContentLoaded", () => {
         updateNavButtonStates();
 
         setTimeout(() => {
-            if (elements.calendarGridHeader) {
-                headerOffsetTop = elements.calendarGridHeader.offsetTop;
+            if (elements.stickyHeaderContainer) {
+                headerOffsetTop = elements.stickyHeaderContainer.offsetTop;
             }
         }, 100);
     };
@@ -426,10 +427,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const handleStickyHeader = () => {
-        if (elements.calendarGridHeader && window.scrollY > headerOffsetTop && headerOffsetTop > 0) {
-            elements.calendarGridHeader.classList.add('sticky-active');
+        if (elements.stickyHeaderContainer && window.scrollY > headerOffsetTop && headerOffsetTop > 0) {
+            elements.stickyHeaderContainer.classList.add('sticky-active');
         } else {
-            elements.calendarGridHeader.classList.remove('sticky-active');
+            elements.stickyHeaderContainer.classList.remove('sticky-active');
         }
     };
 
@@ -443,21 +444,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // --- INÍCIO: NOVAS FUNÇÕES PARA CONTROLAR O MODAL ---
     const openModal = (name, summary, motivation) => {
         elements.modalTitle.textContent = name;
         elements.modalSummary.textContent = summary;
         elements.modalMotivation.innerHTML = `&quot;${motivation}&quot;`;
         elements.modal.style.display = 'flex';
-        // Adiciona uma classe ao body para evitar scroll da página ao fundo
         document.body.style.overflow = 'hidden';
     };
 
     const closeModal = () => {
         elements.modal.style.display = 'none';
-        document.body.style.overflow = ''; // Restaura o scroll
+        document.body.style.overflow = '';
     };
-    // --- FIM: NOVAS FUNÇÕES ---
 
     const init = () => {
         const startYear = new Date().getFullYear();
@@ -530,8 +528,6 @@ document.addEventListener("DOMContentLoaded", () => {
             applyTheme(newTheme);
         });
 
-        // --- INÍCIO: NOVOS EVENT LISTENERS PARA O MODAL ---
-        // Listener de clique delegado para os ícones de informação
         elements.calendarBody.addEventListener('click', (e) => {
             if (e.target.classList.contains('date-info-icon')) {
                 const { name, summary, motivation } = e.target.dataset;
@@ -539,15 +535,67 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Listeners para fechar o modal
         elements.modalCloseBtn.addEventListener('click', closeModal);
         elements.modal.addEventListener('click', (e) => {
-            // Fecha o modal se o clique for no fundo (overlay)
             if (e.target === elements.modal) {
                 closeModal();
             }
         });
-        // --- FIM: NOVOS EVENT LISTENERS ---
+
+        // --- INÍCIO DA ATUALIZAÇÃO: Lógica de animação para o tooltip de pagamento ---
+
+        // Função que inicia a exibição e a animação do tooltip
+        const startTooltipAnimation = (icon) => {
+            hoveredIcon = icon; // Guarda a referência do ícone que o mouse está em cima
+            const tooltipEl = elements.paymentTooltip;
+
+            // Mostra o tooltip e define seu texto
+            tooltipEl.textContent = hoveredIcon.dataset.tooltip;
+            tooltipEl.style.display = 'block';
+
+            // Função que será executada a cada quadro de animação
+            function updatePosition() {
+                if (!hoveredIcon) return; // Para o loop se o mouse não estiver mais no ícone
+
+                // Pega a posição atual do ícone (que está se movendo)
+                const iconRect = hoveredIcon.getBoundingClientRect();
+                // Atualiza a posição do tooltip para corresponder ao ícone
+                tooltipEl.style.left = `${iconRect.left + iconRect.width / 2}px`;
+                tooltipEl.style.top = `${iconRect.top}px`;
+                
+                // Solicita o próximo quadro de animação, criando o loop
+                tooltipAnimationId = requestAnimationFrame(updatePosition);
+            }
+            
+            // Inicia o loop de animação
+            updatePosition();
+        };
+
+        // Função que para a animação e esconde o tooltip
+        const stopTooltipAnimation = () => {
+            if (tooltipAnimationId) {
+                cancelAnimationFrame(tooltipAnimationId); // Para o loop de animação
+                tooltipAnimationId = null;
+            }
+            hoveredIcon = null; // Limpa a referência do ícone
+            elements.paymentTooltip.style.display = 'none'; // Esconde o tooltip
+        };
+
+        // Listener para quando o mouse entra no ícone de pagamento
+        elements.calendarBody.addEventListener('mouseover', (e) => {
+            if (e.target.classList.contains('payment-icon')) {
+                startTooltipAnimation(e.target);
+            }
+        });
+
+        // Listener para quando o mouse sai do ícone de pagamento
+        elements.calendarBody.addEventListener('mouseout', (e) => {
+            if (e.target.classList.contains('payment-icon')) {
+                stopTooltipAnimation();
+            }
+        });
+        // --- FIM DA ATUALIZAÇÃO ---
+
 
         const savedTheme = localStorage.getItem('theme') || 'light';
         applyTheme(savedTheme);

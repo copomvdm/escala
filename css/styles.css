@@ -422,17 +422,21 @@ body.dark-mode .month-year-selector select {
 }
 
 
+#stickyHeaderContainer {
+    position: sticky;
+    top: 0;
+    z-index: 19;
+    transition: box-shadow 0.3s ease;
+    background-color: var(--color-surface);
+}
+
+#stickyHeaderContainer.sticky-active {
+    box-shadow: 0 4px 12px var(--color-shadow-strong);
+}
+
 .calendar-grid-header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    transition: box-shadow 0.3s ease;
-}
-
-.calendar-grid-header.sticky-active {
-    box-shadow: 0 4px 12px var(--color-shadow-strong);
 }
 
 .day-header {
@@ -516,7 +520,6 @@ body.dark-mode .month-year-selector select {
     font-size: 0.85rem;
     font-weight: 500;
     padding: 3px 8px;
-    /* Mais preenchimento para parecer um "chip" */
     border-radius: var(--border-radius-sm);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -531,7 +534,7 @@ body.dark-mode .month-year-selector select {
 }
 
 .animated-sun {
-    color: #f1c40f; /* Cor padrão do sol */
+    color: #f1c40f; 
     animation: sun-animation 4s ease-in-out infinite;
 }
 
@@ -540,7 +543,6 @@ body.dark-mode .month-year-selector select {
     animation: moon-animation 3s ease-in-out infinite;
 }
 
-/* --- MARCADORES E TOOLTIPS --- */
 .today-marker {
     font-size: 0.8rem;
     font-weight: 700;
@@ -562,33 +564,29 @@ body.dark-mode .month-year-selector select {
     text-align: center;
     line-height: 1.2;
     cursor: help;
-    /* Alterações para alinhamento do ícone */
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px; /* Espaço entre o texto e o ícone */
+    gap: 4px;
 }
 
 .payment-icon, .special-date-marker {
     position: relative;
 }
 
-/* ESTILO DO TOOLTIP MODIFICADO */
-.payment-icon::after, .special-date-marker::after {
+/* --- INÍCIO DA ALTERAÇÃO: Tooltip CSS apenas para datas especiais --- */
+.special-date-marker::after {
     content: attr(data-tooltip);
     position: absolute;
-    bottom: 115%; /* Um pouco mais próximo para evitar que saia da tela */
+    bottom: 115%;
     left: 50%;
     transform: translateX(-50%);
-
-    /* --- Alterações para garantir a largura --- */
-    width: auto; /* LARGURA ALTERADA PARA SER AUTOMÁTICA */
-    max-width: 300px; /* Garante que não ultrapasse um limite razoável */
-
+    width: auto; 
+    max-width: 300px;
     background-color: var(--color-tooltip-bg);
     color: var(--color-text-on-primary);
     padding: 10px 15px;
-    border-radius: var(--border-radius-md); /* Bordas um pouco mais arredondadas */
+    border-radius: var(--border-radius-md); 
     font-size: 0.9rem;
     white-space: pre-wrap;
     text-align: center;
@@ -597,18 +595,45 @@ body.dark-mode .month-year-selector select {
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease, bottom 0.3s ease;
     z-index: 20;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra mais pronunciada para destaque */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
 }
 
-.payment-icon:hover::after, .special-date-marker:hover::after {
+.special-date-marker:hover::after {
     opacity: 1;
     visibility: visible;
 }
 
-body.dark-mode .payment-icon::after, body.dark-mode .special-date-marker::after {
+body.dark-mode .special-date-marker::after {
     color: var(--color-tooltip-bg);
     background-color: var(--color-text-on-primary);
 }
+/* --- FIM DA ALTERAÇÃO --- */
+
+
+/* --- INÍCIO DA ALTERAÇÃO: Novo estilo para o Tooltip de Pagamento (controlado por JS) --- */
+.payment-tooltip {
+    position: fixed; /* Fixo na tela para escapar do z-index do calendário */
+    display: none; /* Começa escondido */
+    background-color: var(--color-tooltip-bg);
+    color: var(--color-text-on-primary);
+    padding: 10px 15px;
+    border-radius: var(--border-radius-md);
+    font-size: 0.9rem;
+    font-family: var(--font-primary);
+    z-index: 2000; /* Z-index muito alto para garantir que fique acima de tudo */
+    pointer-events: none; /* Para não interferir com o mouse */
+    transform: translate(-50%, -100%); /* Centraliza e posiciona acima do ícone */
+    margin-top: -8px; /* Pequeno espaçamento */
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+body.dark-mode .payment-tooltip {
+    color: var(--color-tooltip-bg);
+    background-color: var(--color-text-on-primary);
+}
+/* --- FIM DA ALTERAÇÃO --- */
+
 
 .calendar-cell.national-holiday .special-date-marker {
     background-color: var(--color-national-holiday);
@@ -708,22 +733,18 @@ body.dark-mode .payment-icon::after, body.dark-mode .special-date-marker::after 
     font-size: 0.9rem;
 }
 
-/* ##################################################################### */
-/* ### INÍCIO: ESTILOS PARA ÍCONE DE INFORMAÇÃO (SEM FUNDO) E MODAL ### */
-/* ##################################################################### */
-
 .date-info-icon {
-    color: #fff; /* Cor do ícone para branco */
-    font-size: 0.9em; /* Tamanho do ícone relativo ao texto */
+    color: #fff; 
+    font-size: 0.9em; 
     cursor: pointer;
     transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    opacity: 0.8; /* Leve transparência para integrar melhor */
+    opacity: 0.8; 
     vertical-align: middle;
 }
 
 .date-info-icon:hover {
-    transform: scale(1.2); /* Aumenta o ícone no hover */
-    opacity: 1; /* Opacidade total no hover */
+    transform: scale(1.2); 
+    opacity: 1; 
 }
 
 .modal-overlay {
@@ -733,7 +754,7 @@ body.dark-mode .payment-icon::after, body.dark-mode .special-date-marker::after 
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    display: none; /* Inicia oculto */
+    display: none;
     align-items: center;
     justify-content: center;
     z-index: 1000;
@@ -794,11 +815,6 @@ body.dark-mode .payment-icon::after, body.dark-mode .special-date-marker::after 
     border-radius: var(--border-radius-sm);
     color: var(--color-text-primary);
 }
-
-/* ###################################################### */
-/* ### FIM: NOVOS ESTILOS                               ### */
-/* ###################################################### */
-
 
 @media (max-width: 1024px) {
     .calendar-nav {
