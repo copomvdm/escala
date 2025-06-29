@@ -23,10 +23,10 @@
     --color-tooltip-bg: #2c3e50;
 
     /* Cores especiais */
-    --color-national-holiday: #d9534f;
-    --color-state-holiday: #f0ad4e;
-    --color-municipal-holiday: #34a853;
-    --color-commemorative: #5bc0de;
+    --color-national-holiday: #8B0000; /* Novo: Vermelho Escuro / Borgonha para feriado nacional */
+    --color-state-holiday: #A0522D;    /* Novo: Sienaclaro / Marrom para feriado estadual */
+    --color-municipal-holiday: #4682B4; /* Novo: Azul Aço para feriado municipal */
+    --color-commemorative: #6A5ACD;    /* Novo: Azul Ardósia (Slate Blue) para data comemorativa */
 
     --border-radius-sm: 6px;
     --border-radius-md: 12px;
@@ -54,6 +54,12 @@ body.dark-mode {
     --color-today-marker-text: #f48fb1;
     --color-today-marker-bg: #5c2334;
     --color-tooltip-bg: #e2e8f0;
+
+    /* Cores especiais para feriados e datas comemorativas no modo escuro */
+    --color-national-holiday: #DC143C; /* Novo: Carmesim para feriado nacional (Dark Mode) */
+    --color-state-holiday: #D2691E;    /* Novo: Chocolate para feriado estadual (Dark Mode) */
+    --color-municipal-holiday: #6495ED; /* Novo: Azul Centáurea (Cornflower Blue) para feriado municipal (Dark Mode) */
+    --color-commemorative: #9370DB;    /* Novo: Púrpura Médio (Medium Purple) para data comemorativa (Dark Mode) */
 }
 
 *, *::before, *::after {

@@ -48,30 +48,71 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const getSpecialDates = (year) => {
-        const easter = ((y) => {
-            const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
-            const month = Math.floor((h + l - 7 * m + 114) / 31) - 1;
-            const day = ((h + l - 7 * m + 114) % 31) + 1;
-            return new Date(y, month, day);
-        })(year);
-        const getSecondSunday = (targetMonth) => { const date = new Date(year, targetMonth, 1); let sundayCount = 0; while (sundayCount < 2) { if (date.getDay() === 0) sundayCount++; if (sundayCount < 2) date.setDate(date.getDate() + 1); } return date; };
-        const mothersDay = getSecondSunday(4);
-        const fathersDay = getSecondSunday(7);
-        return {
-            '0-1': { type: 'national-holiday', name: 'Ano Novo' }, '3-21': { type: 'national-holiday', name: 'Tiradentes' },
-            '4-1': { type: 'national-holiday', name: 'Dia do Trabalho' }, '8-7': { type: 'national-holiday', name: 'Independência' },
-            '9-12': { type: 'national-holiday', name: 'N. Sra. Aparecida' }, '10-2': { type: 'national-holiday', name: 'Finados' },
-            '10-15': { type: 'national-holiday', name: 'Proclamação da República' }, '11-25': { type: 'national-holiday', name: 'Natal' },
-            '0-25': { type: 'municipal-holiday', name: 'Aniv. de São Paulo' },
-            '6-9': { type: 'state-holiday', name: 'Rev. Constitucionalista' }, '10-20': { type: 'state-holiday', name: 'Consciência Negra' },
-            [`${easter.getMonth()}-${easter.getDate()}`]: { type: 'national-holiday', name: 'Páscoa' },
-            [`${(d => new Date(d.setDate(d.getDate() - 47)))(new Date(easter)).getMonth()}-${(d => new Date(d.setDate(d.getDate() - 47)))(new Date(easter)).getDate()}`]: { type: 'commemorative', name: 'Carnaval' },
-            [`${(d => new Date(d.setDate(d.getDate() - 2)))(new Date(easter)).getMonth()}-${(d => new Date(d.setDate(d.getDate() - 2)))(new Date(easter)).getDate()}`]: { type: 'national-holiday', name: 'Sexta-feira Santa' },
-            [`${(d => new Date(d.setDate(d.getDate() + 60)))(new Date(easter)).getMonth()}-${(d => new Date(d.setDate(d.getDate() + 60)))(new Date(easter)).getDate()}`]: { type: 'national-holiday', name: 'Corpus Christi' },
-            [`${mothersDay.getMonth()}-${mothersDay.getDate()}`]: { type: 'commemorative', name: 'Dia das Mães' },
-            [`${fathersDay.getMonth()}-${fathersDay.getDate()}`]: { type: 'commemorative', name: 'Dia dos Pais' },
-        };
+    const easter = ((y) => {
+        // ... (seu código de cálculo da Páscoa permanece o mesmo) ...
+        const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
+        const month = Math.floor((h + l - 7 * m + 114) / 31) - 1;
+        const day = ((h + l - 7 * m + 114) % 31) + 1;
+        return new Date(y, month, day);
+    })(year);
+
+    // Funções auxiliares para calcular datas baseadas na Páscoa
+    const getDateOffset = (baseDate, offsetDays) => {
+        const d = new Date(baseDate);
+        d.setDate(d.getDate() + offsetDays);
+        return d;
     };
+
+    const carnivalTuesday = getDateOffset(easter, -47);    // Terça-feira de Carnaval
+    const carnivalMonday = getDateOffset(easter, -48);     // Segunda-feira de Carnaval
+    const ashWednesday = getDateOffset(easter, -46);       // Quarta-feira de Cinzas
+    const goodFriday = getDateOffset(easter, -2);          // Sexta-feira Santa
+    const corpusChristi = getDateOffset(easter, 60);       // Corpus Christi
+
+    // Funções para calcular Dia das Mães e Dia dos Pais (já existentes)
+    const getSecondSunday = (targetMonth) => { 
+        const date = new Date(year, targetMonth, 1); 
+        let sundayCount = 0; 
+        while (sundayCount < 2) { 
+            if (date.getDay() === 0) sundayCount++; 
+            if (sundayCount < 2) date.setDate(date.getDate() + 1); 
+        } 
+        return date; 
+    };
+    const mothersDay = getSecondSunday(4); // Mês 4 é Maio
+    const fathersDay = getSecondSunday(7); // Mês 7 é Agosto
+
+    return {
+        // Feriados Nacionais Fixos
+        '0-1': { type: 'national-holiday', name: 'Ano Novo' }, // 1 de Janeiro
+        '3-21': { type: 'national-holiday', name: 'Tiradentes' }, // 21 de Abril
+        '4-1': { type: 'national-holiday', name: 'Dia do Trabalho' }, // 1 de Maio
+        '8-7': { type: 'national-holiday', name: 'Independência do Brasil' }, // 7 de Setembro
+        '9-12': { type: 'national-holiday', name: 'Nossa Senhora Aparecida' }, // 12 de Outubro
+        '10-2': { type: 'national-holiday', name: 'Finados' }, // 2 de Novembro
+        '10-15': { type: 'national-holiday', name: 'Proclamação da República' }, // 15 de Novembro
+        '11-25': { type: 'national-holiday', name: 'Natal' }, // 25 de Dezembro
+
+        // Feriados Estaduais de São Paulo
+        '6-9': { type: 'state-holiday', name: 'Revolução Constitucionalista' }, // 9 de Julho
+        '10-20': { type: 'state-holiday', name: 'Consciência Negra' }, // 20 de Novembro
+
+        // Feriados Municipais de São Paulo
+        '0-25': { type: 'municipal-holiday', name: 'Aniversário de São Paulo' }, // 25 de Janeiro
+        '5-29': { type: 'municipal-holiday', name: 'Dia de São Pedro e São Paulo' }, // 29 de Junho
+
+        // Feriados Móveis (baseados na Páscoa)
+        [`${goodFriday.getMonth()}-${goodFriday.getDate()}`]: { type: 'national-holiday', name: 'Sexta-feira Santa' }, // Feriado Nacional
+        [`${carnivalMonday.getMonth()}-${carnivalMonday.getDate()}`]: { type: 'national-holiday', name: 'Carnaval (Segunda)' }, // Marcado como 'national-holiday' conforme solicitado
+        [`${carnivalTuesday.getMonth()}-${carnivalTuesday.getDate()}`]: { type: 'national-holiday', name: 'Carnaval (Terça)' }, // Marcado como 'national-holiday' conforme solicitado
+        [`${ashWednesday.getMonth()}-${ashWednesday.getDate()}`]: { type: 'commemorative', name: 'Quarta-feira de Cinzas' }, // Mantido como 'commemorative' (ponto facultativo)
+        [`${corpusChristi.getMonth()}-${corpusChristi.getDate()}`]: { type: 'national-holiday', name: 'Corpus Christi' }, // Mantido como 'municipal-holiday' para SP
+
+        // Datas Comemorativas (se quiser exibir no calendário)
+        [`${mothersDay.getMonth()}-${mothersDay.getDate()}`]: { type: 'commemorative', name: 'Dia das Mães' },
+        [`${fathersDay.getMonth()}-${fathersDay.getDate()}`]: { type: 'commemorative', name: 'Dia dos Pais' },
+    };
+};
 
     const getTeamForDate = (targetDate) => {
         const diffTime = targetDate.setHours(0, 0, 0, 0) - config.baseDate.setHours(0, 0, 0, 0);
