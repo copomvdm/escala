@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- DADOS E CONSTANTES ---
     const config = {
         months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+        weekdaysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
         teamColors: {
             A: { bg: '#a7f3d0', text: '#065f46' }, // Verde Menta | Texto Verde Escuro
             B: { bg: '#bfdbfe', text: '#1e40af' }, // Azul Céu | Texto Azul Escuro
@@ -240,68 +241,74 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const createCellHTML = (date, isCurrentMonth, businessDayCounter) => {
-        const day = date.getDate();
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const today = new Date();
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const today = new Date();
 
-        const specialDates = getSpecialDates(year);
-        const dateKey = `${month}-${day}`;
-        const specialDate = specialDates[dateKey];
+    // Lógica adicionada para buscar o nome do dia da semana
+    const dayOfWeek = date.getDay();
+    const dayName = config.weekdaysShort[dayOfWeek];
 
-        const isToday = isCurrentMonth && today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
-        const isWeekend = date.getDay() === 0 || date.getDay() === 6;
-        const isHoliday = specialDate && specialDate.type.includes('holiday');
+    const specialDates = getSpecialDates(year);
+    const dateKey = `${month}-${day}`;
+    const specialDate = specialDates[dateKey];
 
-        const {
-            dayTeam,
-            nightTeam
-        } = getTeamForDate(new Date(date));
+    const isToday = isCurrentMonth && today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+    const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+    const isHoliday = specialDate && specialDate.type.includes('holiday');
 
-        let cellClasses = 'calendar-cell';
-        if (!isCurrentMonth) cellClasses += ' other-month';
-        if (isToday) cellClasses += ' current-day';
-        if (date.getDay() === 0) cellClasses += ' sunday';
-        if (specialDate) cellClasses += ` ${specialDate.type}`;
+    const {
+        dayTeam,
+        nightTeam
+    } = getTeamForDate(new Date(date));
 
-        let paymentIcon = '';
-        if (isCurrentMonth && !isWeekend && !isHoliday) {
-            businessDayCounter.count++;
-            if (businessDayCounter.count === 5) {
-                paymentIcon = `<i class="fas fa-sack-dollar payment-icon" data-tooltip="Dia de Pagamento"></i>`;
-            }
+    let cellClasses = 'calendar-cell';
+    if (!isCurrentMonth) cellClasses += ' other-month';
+    if (isToday) cellClasses += ' current-day';
+    if (date.getDay() === 0) cellClasses += ' sunday';
+    if (specialDate) cellClasses += ` ${specialDate.type}`;
+
+    let paymentIcon = '';
+    if (isCurrentMonth && !isWeekend && !isHoliday) {
+        businessDayCounter.count++;
+        if (businessDayCounter.count === 5) {
+            paymentIcon = `<i class="fas fa-sack-dollar payment-icon" data-tooltip="Dia de Pagamento"></i>`;
         }
+    }
 
-        const specialDateMarker = specialDate ?
-            `<div class="special-date-marker" data-tooltip="${config.specialDateTypes[specialDate.type]}">
-                ${specialDate.name}
-                <i class="fas fa-info-circle date-info-icon" 
-                   data-name="${specialDate.name}" 
-                   data-summary="${specialDate.summary}" 
-                   data-motivation="${specialDate.motivation}"></i>
-            </div>` :
-            '';
+    const specialDateMarker = specialDate ?
+        `<div class="special-date-marker" data-tooltip="${config.specialDateTypes[specialDate.type]}">
+            ${specialDate.name}
+            <i class="fas fa-info-circle date-info-icon" 
+               data-name="${specialDate.name}" 
+               data-summary="${specialDate.summary}" 
+               data-motivation="${specialDate.motivation}"></i>
+        </div>` :
+        '';
 
-        return `
-            <div class="${cellClasses} animate-in">
-                <div class="day-number-wrapper">
-                    <span class="day-number">${day}</span>
-                    ${isToday ? '<span class="today-marker">Hoje</span>' : ''}
-                    ${paymentIcon}
+    // O HTML abaixo agora inclui o <span class="day-name">${dayName}</span>
+    return `
+        <div class="${cellClasses} animate-in">
+            <div class="day-number-wrapper">
+                <span class="day-name">${dayName}</span>
+                <span class="day-number">${day}</span>
+                ${isToday ? '<span class="today-marker">Hoje</span>' : ''}
+                ${paymentIcon}
+            </div>
+            <div class="day-details">
+                <div class="schedule-entry" data-team="${dayTeam}">
+                    <i class="fas fa-sun animated-sun"></i>
+                    <span>Dia: ${dayTeam}</span>
                 </div>
-                <div class="day-details">
-                    <div class="schedule-entry" data-team="${dayTeam}">
-                        <i class="fas fa-sun animated-sun"></i>
-                        <span>Dia: ${dayTeam}</span>
-                    </div>
-                    <div class="schedule-entry" data-team="${nightTeam}">
-                        <i class="fas fa-moon animated-moon"></i>
-                        <span>Noite: ${nightTeam}</span>
-                    </div>
+                <div class="schedule-entry" data-team="${nightTeam}">
+                    <i class="fas fa-moon animated-moon"></i>
+                    <span>Noite: ${nightTeam}</span>
                 </div>
-                ${specialDateMarker}
-            </div>`;
-    };
+            </div>
+            ${specialDateMarker}
+        </div>`;
+};
 
     const renderCalendar = () => {
         const year = currentDate.getFullYear();
