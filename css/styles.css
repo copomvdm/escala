@@ -21,12 +21,13 @@
     --color-today-marker-text: #c2185b;
     --color-today-marker-bg: #fce4ec;
     --color-tooltip-bg: #2c3e50;
+    --color-focus-ring: #f6ad55; /* Cor para o anel de foco */
 
     /* Cores especiais */
-    --color-national-holiday: #8B0000; /* Vermelho Escuro / Borgonha para feriado nacional */
-    --color-state-holiday: #FF4500;    /* Laranja Avermelhado (OrangeRed) para feriado estadual */
-    --color-municipal-holiday: #991b69; /* Orquídea Escura (DarkOrchid) para feriado municipal (Dark Mode) */
-    --color-commemorative: #8A2BE2;    /* Azul Violeta (BlueViolet) para data comemorativa */
+    --color-national-holiday: #8B0000;
+    --color-state-holiday: #FF4500;
+    --color-municipal-holiday: #991b69;
+    --color-commemorative: #8A2BE2;
 
     --border-radius-sm: 6px;
     --border-radius-md: 12px;
@@ -54,12 +55,12 @@ body.dark-mode {
     --color-today-marker-text: #f48fb1;
     --color-today-marker-bg: #5c2334;
     --color-tooltip-bg: #e2e8f0;
+    --color-focus-ring: #e67e22;
 
-    /* Cores especiais para feriados e datas comemorativas no modo escuro */
-    --color-national-holiday: #DC143C; /* Carmesim para feriado nacional (Dark Mode) */
-    --color-state-holiday: #FF6347;    /* Tomate (Tomato) para feriado estadual (Dark Mode) */
-    --color-municipal-holiday: #da3199; /* Rosa Escuro Profundo (DeepPink) para feriado municipal (Dark Mode) */
-    --color-commemorative: #9932CC;    /* Púrpura Escura (DarkOrchid) para data comemorativa (Dark Mode) */
+    --color-national-holiday: #DC143C;
+    --color-state-holiday: #FF6347;
+    --color-municipal-holiday: #da3199;
+    --color-commemorative: #9932CC;
 }
 
 *, *::before, *::after {
@@ -67,91 +68,39 @@ body.dark-mode {
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes sun-animation {
-    0%, 100% {
-        transform: rotate(0deg);
-    }
-
-    50% {
-        transform: rotate(15deg);
-    }
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(15deg); }
 }
 
 @keyframes moon-animation {
-    0%, 100% {
-        transform: rotate(-10deg);
-    }
-
-    50% {
-        transform: rotate(5deg);
-    }
+    0%, 100% { transform: rotate(-10deg); }
+    50% { transform: rotate(5deg); }
 }
 
 @keyframes payment-animation {
-    0% {
-        transform: translateY(0) rotate(0);
-    }
-
-    25% {
-        transform: translateY(-3px) rotate(5deg);
-    }
-
-    50% {
-        transform: translateY(0) rotate(0);
-    }
-
-    75% {
-        transform: translateY(-3px) rotate(-5deg);
-    }
-
-    100% {
-        transform: translateY(0) rotate(0);
-    }
+    0% { transform: translateY(0) rotate(0); }
+    25% { transform: translateY(-3px) rotate(5deg); }
+    50% { transform: translateY(0) rotate(0); }
+    75% { transform: translateY(-3px) rotate(-5deg); }
+    100% { transform: translateY(0) rotate(0); }
 }
 
-/* Animação de realce para as equipes */
 @keyframes highlight-animation {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
-    }
-
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 0, 0, 0.2); }
+    50% { transform: scale(1.05); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
 }
 
-/* --- NOVA ANIMAÇÃO ADICIONADA --- */
 @keyframes notice-icon-animation {
-    0%, 100% {
-        transform: scale(1) rotate(0deg);
-    }
-    10%, 30% {
-        transform: scale(1.1) rotate(-5deg);
-    }
-    20%, 40% {
-        transform: scale(1.1) rotate(5deg);
-    }
-    50% {
-        transform: scale(1) rotate(0deg);
-    }
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    10%, 30% { transform: scale(1.1) rotate(-5deg); }
+    20%, 40% { transform: scale(1.1) rotate(5deg); }
+    50% { transform: scale(1) rotate(0deg); }
 }
 
 
@@ -197,7 +146,6 @@ body {
     margin: 0.25rem 0 0;
 }
 
-/* Seletor de Tema */
 .theme-switch-wrapper {
     display: flex;
     align-items: center;
@@ -257,7 +205,6 @@ input:checked+.slider:before {
     transform: translateX(24px);
 }
 
-/* --- NOVOS ESTILOS ADICIONADOS --- */
 .highlight-notice {
     display: flex;
     align-items: center;
@@ -319,9 +266,9 @@ input:checked+.slider:before {
 }
 
 .team-button.active {
-    color: var(--team-text-color); /* Usa a variável da cor do texto */
-    background-color: var(--team-bg-color); /* Usa a variável da cor de fundo */
-    border-color: var(--team-bg-color); /* Usa a variável da cor de fundo */
+    color: var(--team-text-color);
+    background-color: var(--team-bg-color);
+    border-color: var(--team-bg-color);
     transform: translateY(-1px);
     box-shadow: 0 2px 10px var(--team-bg-color);
 }
@@ -406,7 +353,6 @@ body.dark-mode .month-year-selector select {
     border-color: var(--color-primary);
 }
 
-/* --- ESTILO DO NOVO CABEÇALHO DO MÊS --- */
 .current-month-header {
     background-color: var(--color-primary);
     padding: 0.75rem 1.5rem;
@@ -444,9 +390,7 @@ body.dark-mode .month-year-selector select {
     padding: 0.75rem 0.25rem;
     font-weight: 600;
     color: var(--color-text-secondary);
-    /* INÍCIO DA ALTERAÇÃO: Ajuste de fonte para melhor responsividade */
     font-size: 0.8rem;
-    /* FIM DA ALTERAÇÃO */
     text-transform: uppercase;
     border-bottom: 1px solid var(--color-border);
     background-color: var(--color-day-header-bg);
@@ -508,12 +452,9 @@ body.dark-mode .month-year-selector select {
     color: var(--color-text-primary);
 }
 
-/* INÍCIO DA ALTERAÇÃO: Esconde o nome do dia por padrão (visível só no mobile) */
 .day-name {
     display: none;
 }
-/* FIM DA ALTERAÇÃO */
-
 
 .day-details {
     margin-top: 0.5rem;
@@ -659,10 +600,6 @@ body.dark-mode .payment-tooltip {
     background-color: var(--color-sunday-bg);
 }
 
-.sunday .day-number-wrapper {
-    color: var(--color-sunday-text);
-}
-
 .current-day .day-number {
     display: inline-flex;
     align-items: center;
@@ -717,10 +654,15 @@ body.dark-mode .payment-tooltip {
     border-radius: var(--border-radius-sm);
     background-color: var(--color-background);
     border-bottom: 5px solid;
-    transition: background-color var(--transition-speed);
+    transition: all var(--transition-speed);
     flex-grow: 1;
     min-width: 150px;
     text-align: center;
+}
+
+.statistic-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px var(--color-shadow);
 }
 
 .statistic-item .team {
@@ -796,6 +738,13 @@ body.dark-mode .payment-tooltip {
     transform: rotate(90deg);
 }
 
+/* INÍCIO DA ATUALIZAÇÃO: Estilos de foco para acessibilidade */
+:is(.team-button, .nav-control, .today-button, .month-year-selector select, .modal-close-btn):focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+}
+/* FIM DA ATUALIZAÇÃO */
+
 .modal-content h3 {
     font-family: var(--font-secondary);
     color: var(--color-primary);
@@ -828,7 +777,6 @@ body.dark-mode .payment-tooltip {
     }
 }
 
-/* INÍCIO DA ATUALIZAÇÃO: Novas regras para telas menores que 677px */
 @media (max-width: 725px) {
     .calendar-grid-header {
         display: none;
@@ -859,22 +807,22 @@ body.dark-mode .payment-tooltip {
     }
 
     .day-number-wrapper {
-    grid-area: date;
-    flex-direction: column;
-    align-items: center; /* Centraliza horizontalmente */
-    justify-content: center; /* Adicionado para centralizar verticalmente */
-    gap: 0;
-    font-weight: 700;
-    height: 100%; /* Garante que o wrapper ocupe toda a altura da célula para a centralização funcionar */
-}
+        grid-area: date;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        font-weight: 700;
+        height: 100%;
+    }
     
     .day-name {
-    display: block;
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-    font-weight: 600;
-    text-transform: uppercase;
-}
+        display: block;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+        font-weight: 600;
+        text-transform: uppercase;
+    }
     
     .day-number {
         font-size: 1.6rem;
@@ -928,7 +876,6 @@ body.dark-mode .payment-tooltip {
         border-radius: 0;
     }
 }
-/* FIM DA ATUALIZAÇÃO */
 
 
 @media (max-width: 480px) {
