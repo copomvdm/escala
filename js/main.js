@@ -1060,21 +1060,35 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.modalMotivation.innerHTML = `&quot;${motivation}&quot;`;
         elements.modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+
+        // Lógica para iniciar os fogos de artifício
+        if (name === 'Ano Novo') {
+            launchFireworks(); // Sempre chama launchFireworks para Ano Novo
+        } else {
+            // Se não for Ano Novo, garante que os fogos estão parados
+            // Chama stopFireworks sem atraso aqui, para evitar que uma animação anterior continue
+            // ou para garantir que não haja fogos para outras datas.
+            // O `setTimeout` interno de `stopFireworks` cuida do delay para esconder o canvas.
+            stopFireworks();
+        }
     };
 
     const closeModal = () => {
         elements.modal.style.display = 'none';
         document.body.style.overflow = '';
+        stopFireworks(); // Ao fechar o modal, sempre pare os fogos
     };
 
     // --- NOVO SISTEMA DE ANIMAÇÃO DE FOGOS DE ARTIFÍCIO ---
 
+    // Variáveis globais para controlar a animação
     const fireworksCanvas = document.getElementById('fireworks-canvas');
     const ctx = fireworksCanvas.getContext('2d');
     let fireworks = [];
     let particles = [];
     let animationId = null;
     let launchIntervalId = null;
+    let stopTimeoutId = null; // ID para o setTimeout de stopFireworks
 
     function setupCanvas() {
         fireworksCanvas.width = window.innerWidth;
@@ -1146,7 +1160,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function animate() {
+        // Redesenhamos a cada frame para criar o rastro
         animationId = requestAnimationFrame(animate);
+
+        // Ajuste aqui: limpe apenas uma fração da tela para o efeito de rastro
         ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
         ctx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
 
@@ -1154,59 +1171,88 @@ document.addEventListener("DOMContentLoaded", () => {
             firework.update();
             firework.draw();
 
+            // Se o foguete atingiu o alvo, cria explosão
             if (firework.y <= firework.targetY) {
                 createExplosion(firework);
-                fireworks.splice(index, 1);
+                fireworks.splice(index, 1); // Remove o foguete
             }
         });
 
         particles.forEach((particle, index) => {
             if (particle.alpha <= 0) {
-                particles.splice(index, 1);
+                particles.splice(index, 1); // Remove a partícula quando some
             } else {
                 particle.update();
                 particle.draw();
             }
         });
+
+        // Limpa fogos e partículas se a lista estiver vazia e a animação não tiver um 'launchIntervalId' ativo
+        // Isso impede que o canvas fique ativo sem nada para desenhar, mas sem interromper o loop principal antes da hora.
+        if (fireworks.length === 0 && particles.length === 0 && !launchIntervalId) {
+            // Opcional: para o requestAnimationFrame aqui também se realmente não houver mais nada
+            // Mas é mais seguro deixar o closeModal chamar stopFireworks para gerenciar isso.
+        }
     }
 
-    function stopFireworks() {
+    function stopFireworks() { // Não precisa mais do parâmetro 'immediate' aqui
+        // Limpa qualquer timer de parada pendente para evitar conflitos
+        if (stopTimeoutId) {
+            clearTimeout(stopTimeoutId);
+            stopTimeoutId = null;
+        }
+
         if (launchIntervalId) {
             clearInterval(launchIntervalId); // Para de lançar novos foguetes
             launchIntervalId = null;
         }
+        if (animationId) {
+            cancelAnimationFrame(animationId); // Para o loop de animação (requestAnimationFrame)
+            animationId = null;
+        }
 
-        // Para a animação após um tempo para as partículas sumirem
-        setTimeout(() => {
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            }
-            fireworksCanvas.style.display = 'none'; // Esconde o canvas
-            fireworks = []; // Limpa os arrays para a próxima vez
-            particles = [];
-        }, 2000); // Espera 2s para as últimas partículas desaparecerem
+        // Adia a limpeza do canvas e dos arrays para que as partículas atuais desapareçam suavemente
+        stopTimeoutId = setTimeout(() => {
+            fireworksCanvas.style.display = 'none';
+            fireworks = []; // Limpa os fogos
+            particles = []; // Limpa as partículas
+        }, 2000); // Espera 2 segundos para as últimas partículas desaparecerem
     }
 
     function launchFireworks() {
+        // Zera o estado anterior para garantir um novo início limpo
+        if (stopTimeoutId) {
+            clearTimeout(stopTimeoutId);
+            stopTimeoutId = null;
+        }
+        if (launchIntervalId) {
+            clearInterval(launchIntervalId);
+            launchIntervalId = null;
+        }
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+        fireworks = [];
+        particles = [];
+
         setupCanvas();
         fireworksCanvas.style.display = 'block';
 
-        // Para a animação anterior se estiver rodando
-        if (animationId) {
-            cancelAnimationFrame(animationId);
+        // Inicia o loop de desenho apenas se não estiver rodando
+        if (!animationId) {
+            animate();
         }
-        animate(); // Inicia o loop de desenho
 
         // Lança o primeiro foguete imediatamente
         fireworks.push(new Firework());
 
         // Define um intervalo para continuar lançando foguetes
         launchIntervalId = setInterval(() => {
-            if (fireworks.length < 10) { // Limita a quantidade de foguetes na tela
+            if (fireworks.length < 10) { // Limite de foguetes ativos simultaneamente
                 fireworks.push(new Firework());
             }
-        }, 800); // Lança um novo foguete a cada 800ms
+        }, 800);
     }
 
     const init = () => {
