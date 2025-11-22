@@ -21,7 +21,7 @@
     --color-today-marker-text: #c2185b;
     --color-today-marker-bg: #fce4ec;
     --color-tooltip-bg: #2c3e50;
-    --color-focus-ring: #f6ad55; /* Cor para o anel de foco */
+    --color-focus-ring: #f6ad55;
 
     /* Cores especiais */
     --color-national-holiday: #8B0000;
@@ -103,7 +103,6 @@ body.dark-mode {
     50% { transform: scale(1) rotate(0deg); }
 }
 
-
 body {
     background-color: var(--color-background);
     font-family: var(--font-primary);
@@ -122,6 +121,13 @@ body {
 .main-header {
     text-align: center;
     margin-bottom: 2rem;
+    padding: 1.5rem 1rem 0.5rem;
+    border-radius: var(--border-radius-lg);
+    background: radial-gradient(circle at top left, rgba(230, 126, 34, 0.12), transparent 55%);
+}
+
+body.dark-mode .main-header {
+    background: radial-gradient(circle at top left, rgba(246, 173, 85, 0.2), transparent 55%);
 }
 
 .header-top {
@@ -193,15 +199,15 @@ body {
     border-radius: 50%;
 }
 
-input:checked+.slider {
+input:checked + .slider {
     background-color: var(--color-primary);
 }
 
-input:focus+.slider {
+input:focus + .slider {
     box-shadow: 0 0 1px var(--color-primary);
 }
 
-input:checked+.slider:before {
+input:checked + .slider:before {
     transform: translateX(24px);
 }
 
@@ -237,7 +243,6 @@ input:checked+.slider:before {
     font-weight: 700;
 }
 
-
 .team-buttons {
     display: flex;
     justify-content: center;
@@ -265,6 +270,10 @@ input:checked+.slider:before {
     border-color: var(--color-secondary);
 }
 
+.team-button:active {
+    transform: scale(0.97);
+}
+
 .team-button.active {
     color: var(--team-text-color);
     background-color: var(--team-bg-color);
@@ -274,10 +283,23 @@ input:checked+.slider:before {
 }
 
 .calendar-container {
-    background: var(--color-surface);
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.96),
+        rgba(248, 250, 252, 0.96)
+    );
     border-radius: var(--border-radius-lg);
     box-shadow: 0 10px 30px var(--color-shadow);
-    transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    transition: background-color var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
+}
+
+body.dark-mode .calendar-container {
+    background: linear-gradient(145deg,
+        rgba(26, 32, 44, 0.95),
+        rgba(15, 23, 42, 0.98)
+    );
+    border-color: rgba(148, 163, 184, 0.25);
 }
 
 .calendar-nav {
@@ -339,7 +361,7 @@ body.dark-mode .month-year-selector select {
     padding: 0.6rem 1rem;
     font-size: 0.9rem;
     font-weight: 600;
-    border-radius: var(--border-radius-sm);
+    border-radius: 999px;
     border: 1px solid var(--color-border);
     background-color: var(--color-surface);
     color: var(--color-primary);
@@ -366,7 +388,6 @@ body.dark-mode .month-year-selector select {
     font-size: 1.6rem;
     font-weight: 800;
 }
-
 
 #stickyHeaderContainer {
     position: sticky;
@@ -405,22 +426,26 @@ body.dark-mode .month-year-selector select {
 
 .calendar-cell {
     position: relative;
-    min-height: 125px;
-    padding: 0.5rem;
+    min-height: 110px;
+    padding: 0.6rem 0.75rem;
     background-color: var(--color-surface);
     border-right: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
-    transition: background-color var(--transition-speed), border-color var(--transition-speed);
     display: flex;
     flex-direction: column;
+    transition:
+        background-color var(--transition-speed),
+        border-color var(--transition-speed);
 }
 
 .calendar-cell.animate-in {
-    animation: fadeIn 0.5s ease-out forwards;
+    animation: fadeIn 0.25s ease-out forwards;
 }
 
 .calendar-cell:hover {
     z-index: 15;
+    background-color: rgba(148, 163, 184, 0.06);
+    border-color: rgba(148, 163, 184, 0.6);
 }
 
 .calendar-cell:nth-child(7n) {
@@ -431,11 +456,15 @@ body.dark-mode .month-year-selector select {
     background-color: var(--color-other-month-bg);
 }
 
-.other-month .day-number-wrapper, .other-month .day-details, .other-month .special-date-marker {
+.other-month .day-number-wrapper,
+.other-month .day-details,
+.other-month .special-date-marker {
     opacity: 0.5;
 }
 
-.other-month .animated-sun, .other-month .animated-moon, .other-month .payment-icon {
+.other-month .animated-sun,
+.other-month .animated-moon,
+.other-month .payment-icon {
     animation: none;
 }
 
@@ -446,32 +475,38 @@ body.dark-mode .month-year-selector select {
 .day-number-wrapper {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     font-weight: 600;
     font-size: 0.9rem;
     color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
 }
 
 .day-name {
-    display: none;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-secondary);
 }
 
 .day-details {
-    margin-top: 0.5rem;
+    margin-top: 0.35rem;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.25rem;
 }
 
+/* Linhas de escala bem neutras */
 .schedule-entry {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
+    gap: 0.4rem;
+    font-size: 0.8rem;
     font-weight: 500;
-    padding: 3px 8px;
-    border-radius: var(--border-radius-sm);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 0;              /* sem pill, sem fundo */
+    border-radius: 0;
+    background: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .schedule-entry.highlight-animation {
@@ -479,12 +514,18 @@ body.dark-mode .month-year-selector select {
 }
 
 .schedule-entry i {
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.schedule-entry[data-team].highlighted,
+.schedule-entry[data-team][style*="background-color"] {
+    border-radius: 6px;
+    padding: 2px 6px;
 }
 
 .animated-sun {
-    color: #f1c40f; 
+    color: #f1c40f;
     animation: sun-animation 4s ease-in-out infinite;
 }
 
@@ -520,7 +561,8 @@ body.dark-mode .month-year-selector select {
     gap: 4px;
 }
 
-.payment-icon, .special-date-marker {
+.payment-icon,
+.special-date-marker {
     position: relative;
 }
 
@@ -530,12 +572,12 @@ body.dark-mode .month-year-selector select {
     bottom: 115%;
     left: 50%;
     transform: translateX(-50%);
-    width: auto; 
+    width: auto;
     max-width: 300px;
     background-color: var(--color-tooltip-bg);
     color: var(--color-text-on-primary);
     padding: 10px 15px;
-    border-radius: var(--border-radius-md); 
+    border-radius: var(--border-radius-md);
     font-size: 0.9rem;
     white-space: pre-wrap;
     text-align: center;
@@ -544,7 +586,7 @@ body.dark-mode .month-year-selector select {
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease, bottom 0.3s ease;
     z-index: 20;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .special-date-marker:hover::after {
@@ -559,7 +601,7 @@ body.dark-mode .special-date-marker::after {
 
 .payment-tooltip {
     position: fixed;
-    display: none; 
+    display: none;
     background-color: var(--color-tooltip-bg);
     color: var(--color-text-on-primary);
     padding: 10px 15px;
@@ -568,7 +610,7 @@ body.dark-mode .special-date-marker::after {
     font-family: var(--font-primary);
     z-index: 2000;
     pointer-events: none;
-    transform: translate(-50%, -100%); 
+    transform: translate(-50%, -100%);
     margin-top: -8px;
     white-space: nowrap;
     transition: opacity 0.2s ease;
@@ -578,7 +620,6 @@ body.dark-mode .payment-tooltip {
     color: var(--color-tooltip-bg);
     background-color: var(--color-text-on-primary);
 }
-
 
 .calendar-cell.national-holiday .special-date-marker {
     background-color: var(--color-national-holiday);
@@ -601,26 +642,21 @@ body.dark-mode .payment-tooltip {
 }
 
 .current-day .day-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    color: var(--color-text-on-primary);
-    background-color: var(--color-accent);
+    color: var(--color-accent);
+    font-weight: 700;
 }
 
 .day-number {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 .payment-icon {
     color: #1e8e3e;
     font-size: 1rem;
     margin-left: auto;
-    animation: payment-animation 2s ease-in-out infinite;
+    animation: payment-animation 3s ease-in-out infinite;
     cursor: help;
+    opacity: 0.9;
 }
 
 .statistics-section {
@@ -671,6 +707,27 @@ body.dark-mode .payment-tooltip {
     margin-bottom: 0.25rem;
 }
 
+.statistic-item .count {
+    font-size: 0.9rem;
+}
+
+.stat-bar {
+    width: 100%;
+    margin-top: 0.4rem;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.25);
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--stat-color-start, #cbd5f5), var(--stat-color-end, #4c51bf));
+    transition: width 0.6s ease-out;
+}
+
 .page-footer {
     text-align: center;
     margin-top: 3rem;
@@ -680,17 +737,17 @@ body.dark-mode .payment-tooltip {
 }
 
 .date-info-icon {
-    color: #fff; 
-    font-size: 0.9em; 
+    color: #fff;
+    font-size: 0.9em;
     cursor: pointer;
     transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
-    opacity: 0.8; 
+    opacity: 0.8;
     vertical-align: middle;
 }
 
 .date-info-icon:hover {
-    transform: scale(1.2); 
-    opacity: 1; 
+    transform: scale(1.2);
+    opacity: 1;
 }
 
 .modal-overlay {
@@ -739,6 +796,38 @@ body.dark-mode .payment-tooltip {
     transform: rotate(90deg);
 }
 
+.modal-chip {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.75rem;
+    background-color: rgba(148, 163, 184, 0.15);
+    color: var(--color-text-secondary);
+}
+
+.modal-chip--national {
+    background-color: rgba(220, 38, 38, 0.12);
+    color: #b91c1c;
+}
+
+.modal-chip--state {
+    background-color: rgba(249, 115, 22, 0.12);
+    color: #c05621;
+}
+
+.modal-chip--municipal {
+    background-color: rgba(236, 72, 153, 0.12);
+    color: #be185d;
+}
+
+.modal-chip--commemorative {
+    background-color: rgba(124, 58, 237, 0.12);
+    color: #6d28d9;
+}
+
 /* INÍCIO DA ATUALIZAÇÃO: Estilos de foco para acessibilidade */
 :is(.team-button, .nav-control, .today-button, .month-year-selector select, .modal-close-btn):focus-visible {
     outline: 2px solid var(--color-focus-ring);
@@ -772,14 +861,14 @@ body.dark-mode .payment-tooltip {
 
 /* Estilo para a Animação de Fogos de Artifício (Canvas) */
 #fireworks-canvas {
-    position: fixed; /* Ocupa a tela inteira, independente da rolagem */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 999; /* Fica atrás do conteúdo do modal, mas sobre o overlay */
-    pointer-events: none; /* Impede que o canvas bloqueie cliques */
-    display: none; /* Começa invisível */
+    z-index: 999;
+    pointer-events: none;
+    display: none;
 }
 
 @media (max-width: 1024px) {
@@ -828,7 +917,7 @@ body.dark-mode .payment-tooltip {
         font-weight: 700;
         height: 100%;
     }
-    
+
     .day-name {
         display: block;
         font-size: 0.75rem;
@@ -836,7 +925,7 @@ body.dark-mode .payment-tooltip {
         font-weight: 600;
         text-transform: uppercase;
     }
-    
+
     .day-number {
         font-size: 1.6rem;
     }
@@ -873,8 +962,14 @@ body.dark-mode .payment-tooltip {
     }
 
     .today-marker {
-        display: none;
-    }
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-today-marker-text);
+    background-color: var(--color-today-marker-bg);
+    padding: 3px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
 
     .current-day {
         border-left: 4px solid var(--color-accent);
@@ -889,7 +984,6 @@ body.dark-mode .payment-tooltip {
         border-radius: 0;
     }
 }
-
 
 @media (max-width: 480px) {
     .team-buttons {
@@ -907,5 +1001,122 @@ body.dark-mode .payment-tooltip {
 
     .special-date-marker {
         font-size: 0.6rem;
+    }
+}
+
+/* === Layout e detalhes visuais extras === */
+
+.calendar-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Legenda de feriados */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem 0 0;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 4px;
+}
+
+.legend-nacional {
+    background-color: var(--color-national-holiday);
+}
+
+.legend-estadual {
+    background-color: var(--color-state-holiday);
+}
+
+.legend-municipal {
+    background-color: var(--color-municipal-holiday);
+}
+
+.legend-comemorativo {
+    background-color: var(--color-commemorative);
+}
+
+/* Botões das equipes com ícone e badge */
+
+.team-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.team-button::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--team-dot-color, #d1d5db);
+}
+
+.team-button i {
+    font-size: 0.9rem;
+}
+
+.team-label {
+    white-space: nowrap;
+}
+
+.team-badge {
+    margin-left: 0.25rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    background-color: rgba(0, 0, 0, 0.04);
+    color: var(--color-text-secondary);
+}
+
+/* Hover mais marcante nas células do calendário */
+
+.calendar-cell:hover {
+    z-index: 15;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+/* Destaque especial para o número do dia atual */
+
+.current-day .day-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--color-accent), #fbbf77);
+    color: var(--color-text-on-primary);
+}
+
+/* Redução de movimento para acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .animated-sun,
+    .animated-moon,
+    .payment-icon {
+        animation: none !important;
     }
 }

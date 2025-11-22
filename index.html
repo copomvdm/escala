@@ -41,16 +41,36 @@
             </div>
 
             <div class="team-buttons">
-                <button class="team-button" data-team="A">Equipe A</button>
-                <button class="team-button" data-team="B">Equipe B</button>
-                <button class="team-button" data-team="C">Equipe C</button>
-                <button class="team-button" data-team="D">Equipe D</button>
-                <button class="team-button" data-team="E">Equipe E</button>
+                <button class="team-button" data-team="A">
+                    <i class="fas fa-headset"></i>
+                    <span class="team-label">Equipe A</span>
+                    <span class="team-badge" data-team-badge="A">0 plantões</span>
+                </button>
+                <button class="team-button" data-team="B">
+                    <i class="fas fa-headset"></i>
+                    <span class="team-label">Equipe B</span>
+                    <span class="team-badge" data-team-badge="B">0 plantões</span>
+                </button>
+                <button class="team-button" data-team="C">
+                    <i class="fas fa-headset"></i>
+                    <span class="team-label">Equipe C</span>
+                    <span class="team-badge" data-team-badge="C">0 plantões</span>
+                </button>
+                <button class="team-button" data-team="D">
+                    <i class="fas fa-headset"></i>
+                    <span class="team-label">Equipe D</span>
+                    <span class="team-badge" data-team-badge="D">0 plantões</span>
+                </button>
+                <button class="team-button" data-team="E">
+                    <i class="fas fa-headset"></i>
+                    <span class="team-label">Equipe E</span>
+                    <span class="team-badge" data-team-badge="E">0 plantões</span>
+                </button>
             </div>
 
             <div class="calendar-container">
                 <nav class="calendar-nav">
-                    <a href="#" id="prevMonth" class="nav-control" title="Mês anterior">
+                    <a href="#" id="prevMonth" class="nav-control" title="Mês anterior" aria-label="Mês anterior">
                         <i class="fas fa-chevron-left"></i>
                         <span id="prevMonthName" class="month-name"></span>
                     </a>
@@ -60,12 +80,12 @@
                         <select id="yearSelect" aria-label="Selecionar Ano"></select>
                     </div>
 
-                    <button id="todayButton" class="today-button" title="Ir para o dia de hoje">
+                    <button id="todayButton" class="today-button" title="Ir para o dia de hoje" aria-label="Ir para o dia de hoje">
                         <i class="fas fa-calendar-day"></i>
                         <span>Hoje</span>
                     </button>
 
-                    <a href="#" id="nextMonth" class="nav-control" title="Próximo mês">
+                    <a href="#" id="nextMonth" class="nav-control" title="Próximo mês" aria-label="Próximo mês">
                         <span id="nextMonthName" class="month-name"></span>
                         <i class="fas fa-chevron-right"></i>
                     </a>
@@ -86,27 +106,45 @@
                         <div class="day-header">Sáb</div>
                     </div>
                 </div>
-                <div class="calendar-grid" id="calendarBody">
-                    </div>
+                <div class="calendar-grid" id="calendarBody"></div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-color legend-nacional"></span>
+                    <span>Feriado Nacional</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color legend-estadual"></span>
+                    <span>Feriado Estadual</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color legend-municipal"></span>
+                    <span>Feriado Municipal</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color legend-comemorativo"></span>
+                    <span>Data Comemorativa</span>
+                </div>
             </div>
 
             <section id="estatisticas" class="statistics-section">
                 <h3>Resumo do Mês</h3>
-                <div id="estatisticaContainer">
-                    </div>
+                <div id="estatisticaContainer"></div>
             </section>
         </main>
 
         <footer class="page-footer">
             <p>Desenvolvido pela Equipe B</p>
-            <p>Atualizado por Cb Jefferson</p>
+            <p>Atualizado em 21/11/2025</p>
             <img src="https://hitwebcounter.com/counter/counter.php?page=21016690&amp;style=0006&amp;nbdigits=5&amp;type=page&amp;initCount=4530" title="Counter Widget" alt="Visit counter For Websites" border="0">
         </footer>
     </div>
-    
+
     <div id="specialDateModal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close-btn" title="Fechar">&times;</button>
+            <span id="modalTypeChip" class="modal-chip"></span>
             <h3 id="modalTitle"></h3>
             <p id="modalSummary"></p>
             <blockquote id="modalMotivation"></blockquote>
@@ -115,7 +153,7 @@
     </div>
 
     <div id="paymentTooltip" class="payment-tooltip"></div>
-    
+
     <script src="./js/specialDates.js"></script>
     <script src="./js/main.js"></script>
 </body>
