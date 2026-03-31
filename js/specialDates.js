@@ -1,9 +1,4 @@
-/**
- * Módulo de Datas Especiais Fixas
- * * Refatorado para ES Module (ESM) para evitar poluição do escopo global.
- * As datas móveis (Páscoa, Carnaval, etc.) são calculadas dinamicamente no main.js.
- */
-export const getSpecialDatesData = () => {
+const getSpecialDatesData = () => {
   return {
     // --- JANEIRO (0) ---
     "0-1": {

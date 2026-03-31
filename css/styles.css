@@ -435,9 +435,7 @@ body.dark-mode .month-year-selector select {
     flex-direction: column;
     transition:
         background-color var(--transition-speed),
-        border-color var(--transition-speed),
-        transform var(--transition-speed),
-        box-shadow var(--transition-speed);
+        border-color var(--transition-speed);
 }
 
 .calendar-cell.animate-in {
@@ -448,8 +446,6 @@ body.dark-mode .month-year-selector select {
     z-index: 15;
     background-color: rgba(148, 163, 184, 0.06);
     border-color: rgba(148, 163, 184, 0.6);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--color-shadow);
 }
 
 .calendar-cell:nth-child(7n) {
@@ -464,6 +460,12 @@ body.dark-mode .month-year-selector select {
 .other-month .day-details,
 .other-month .special-date-marker {
     opacity: 0.5;
+}
+
+.other-month .animated-sun,
+.other-month .animated-moon,
+.other-month .payment-icon {
+    animation: none;
 }
 
 .current-day {
@@ -501,7 +503,7 @@ body.dark-mode .month-year-selector select {
     gap: 0.4rem;
     font-size: 0.8rem;
     font-weight: 500;
-    padding: 0;
+    padding: 0;              /* sem pill, sem fundo */
     border-radius: 0;
     background: transparent;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -522,28 +524,13 @@ body.dark-mode .month-year-selector select {
     padding: 2px 6px;
 }
 
-/* Otimização de Performance nas Animações */
-.animated-sun,
-.animated-moon {
-    will-change: transform;
-    transition: transform 0.3s ease, color 0.3s ease;
-}
-
 .animated-sun {
     color: #f1c40f;
+    animation: sun-animation 4s ease-in-out infinite;
 }
 
 .animated-moon {
     color: var(--color-secondary);
-}
-
-.calendar-cell:hover .animated-sun,
-.calendar-cell:focus-within .animated-sun {
-    animation: sun-animation 4s ease-in-out infinite;
-}
-
-.calendar-cell:hover .animated-moon,
-.calendar-cell:focus-within .animated-moon {
     animation: moon-animation 3s ease-in-out infinite;
 }
 
@@ -655,14 +642,7 @@ body.dark-mode .payment-tooltip {
 }
 
 .current-day .day-number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, var(--color-accent), #fbbf77);
-    color: var(--color-text-on-primary);
+    color: var(--color-accent);
     font-weight: 700;
 }
 
@@ -848,11 +828,12 @@ body.dark-mode .payment-tooltip {
     color: #6d28d9;
 }
 
-/* Estilos de foco para acessibilidade */
+/* INÍCIO DA ATUALIZAÇÃO: Estilos de foco para acessibilidade */
 :is(.team-button, .nav-control, .today-button, .month-year-selector select, .modal-close-btn):focus-visible {
     outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
 }
+/* FIM DA ATUALIZAÇÃO */
 
 .modal-content h3 {
     font-family: var(--font-secondary);
@@ -981,14 +962,14 @@ body.dark-mode .payment-tooltip {
     }
 
     .today-marker {
-        font-size: 0.7rem;
-        font-weight: 600;
-        color: var(--color-today-marker-text);
-        background-color: var(--color-today-marker-bg);
-        padding: 3px 6px;
-        border-radius: 4px;
-        text-transform: uppercase;
-    }
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--color-today-marker-text);
+    background-color: var(--color-today-marker-bg);
+    padding: 3px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
 
     .current-day {
         border-left: 4px solid var(--color-accent);
@@ -1021,6 +1002,14 @@ body.dark-mode .payment-tooltip {
     .special-date-marker {
         font-size: 0.6rem;
     }
+}
+
+/* === Layout e detalhes visuais extras === */
+
+.calendar-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 /* Legenda de feriados */
@@ -1061,6 +1050,8 @@ body.dark-mode .payment-tooltip {
     background-color: var(--color-commemorative);
 }
 
+/* Botões das equipes com ícone e badge */
+
 .team-button {
     display: inline-flex;
     align-items: center;
@@ -1091,6 +1082,27 @@ body.dark-mode .payment-tooltip {
     font-size: 0.7rem;
     background-color: rgba(0, 0, 0, 0.04);
     color: var(--color-text-secondary);
+}
+
+/* Hover mais marcante nas células do calendário */
+
+.calendar-cell:hover {
+    z-index: 15;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+/* Destaque especial para o número do dia atual */
+
+.current-day .day-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--color-accent), #fbbf77);
+    color: var(--color-text-on-primary);
 }
 
 /* Redução de movimento para acessibilidade */
