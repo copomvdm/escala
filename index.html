@@ -1,161 +1,298 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Calendário interativo com a escala de serviço das equipes do COPOM. Visualize os plantões de forma fácil e organizada.">
+    <meta
+      name="description"
+      content="Calendário operacional interativo com a escala de serviço das equipes do COPOM."
+    />
+    <meta name="theme-color" content="#0f2f4a" />
+    <meta name="color-scheme" content="light dark" />
+
     <title>Escala de Serviço - COPOM</title>
-    <link rel="shortcut icon" href="./assets/calendario-ico.png" type="image/x-icon">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="./assets/copom-calendar.svg" type="image/svg+xml" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+      (function applyInitialTheme() {
+        try {
+          var storedTheme = window.localStorage.getItem("copom-scale-theme");
+          var prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          var theme =
+            storedTheme === "dark" || storedTheme === "light"
+              ? storedTheme
+              : prefersDark
+                ? "dark"
+                : "light";
 
-    <link rel="stylesheet" href="./css/styles.css">
-</head>
+          document.documentElement.dataset.theme = theme;
 
-<body>
-    <div class="container">
-        <header class="main-header">
-            <div class="header-top">
-                <h1 class="page-title">Escala de Serviço das Equipes</h1>
-                <div class="theme-switch-wrapper">
-                    <i class="fas fa-sun"></i>
-                    <label class="theme-switch" for="theme-toggle">
-                        <input type="checkbox" id="theme-toggle" />
-                        <div class="slider round"></div>
-                    </label>
-                    <i class="fas fa-moon"></i>
-                </div>
-            </div>
-            <p class="page-subtitle">COPOM - Centro de Operações da Polícia Militar</p>
-        </header>
+          var themeColor = document.querySelector('meta[name="theme-color"]');
 
-        <main class="calendar-main">
-            <div class="highlight-notice">
-                <i class="fas fa-mouse-pointer notice-icon-animated"></i>
-                <p><strong>Dica:</strong> Clique nos botões das equipes para destacá-las no calendário.</p>
-            </div>
+          if (themeColor) {
+            themeColor.setAttribute(
+              "content",
+              theme === "dark" ? "#111827" : "#0f2f4a",
+            );
+          }
+        } catch (error) {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
 
-            <div class="team-buttons">
-                <button class="team-button" data-team="A">
-                    <i class="fas fa-headset"></i>
-                    <span class="team-label">Equipe A</span>
-                    <span class="team-badge" data-team-badge="A">0 plantões</span>
-                </button>
-                <button class="team-button" data-team="B">
-                    <i class="fas fa-headset"></i>
-                    <span class="team-label">Equipe B</span>
-                    <span class="team-badge" data-team-badge="B">0 plantões</span>
-                </button>
-                <button class="team-button" data-team="C">
-                    <i class="fas fa-headset"></i>
-                    <span class="team-label">Equipe C</span>
-                    <span class="team-badge" data-team-badge="C">0 plantões</span>
-                </button>
-                <button class="team-button" data-team="D">
-                    <i class="fas fa-headset"></i>
-                    <span class="team-label">Equipe D</span>
-                    <span class="team-badge" data-team-badge="D">0 plantões</span>
-                </button>
-                <button class="team-button" data-team="E">
-                    <i class="fas fa-headset"></i>
-                    <span class="team-label">Equipe E</span>
-                    <span class="team-badge" data-team-badge="E">0 plantões</span>
-                </button>
-            </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-            <div class="calendar-container">
-                <nav class="calendar-nav">
-                    <a href="#" id="prevMonth" class="nav-control" title="Mês anterior" aria-label="Mês anterior">
-                        <i class="fas fa-chevron-left"></i>
-                        <span id="prevMonthName" class="month-name"></span>
-                    </a>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
 
-                    <div class="month-year-selector">
-                        <select id="monthSelect" aria-label="Selecionar Mês"></select>
-                        <select id="yearSelect" aria-label="Selecionar Ano"></select>
-                    </div>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 
-                    <button id="todayButton" class="today-button" title="Ir para o dia de hoje" aria-label="Ir para o dia de hoje">
-                        <i class="fas fa-calendar-day"></i>
-                        <span>Hoje</span>
-                    </button>
+    <link rel="stylesheet" href="./css/styles.css" />
 
-                    <a href="#" id="nextMonth" class="nav-control" title="Próximo mês" aria-label="Próximo mês">
-                        <span id="nextMonthName" class="month-name"></span>
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </nav>
+    <script src="./js/config.js" defer></script>
+    <script src="./js/date-utils.js" defer></script>
+    <script src="./js/special-dates.js" defer></script>
+    <script src="./js/schedule-service.js" defer></script>
+    <script src="./js/fireworks.js" defer></script>
+    <script src="./js/app.js" defer></script>
+  </head>
 
-                <div id="stickyHeaderContainer">
-                    <div class="current-month-header">
-                        <h2 id="currentMonthYear"></h2>
-                    </div>
+  <body>
+    <a class="skip-link" href="#calendarBody">Ir direto para o calendário</a>
 
-                    <div class="calendar-grid-header" id="calendarGridHeader">
-                        <div class="day-header">Dom</div>
-                        <div class="day-header">Seg</div>
-                        <div class="day-header">Ter</div>
-                        <div class="day-header">Qua</div>
-                        <div class="day-header">Qui</div>
-                        <div class="day-header">Sex</div>
-                        <div class="day-header">Sáb</div>
-                    </div>
-                </div>
-                <div class="calendar-grid" id="calendarBody"></div>
+    <div class="app-shell">
+      <header class="hero" aria-labelledby="pageTitle">
+        <div class="hero__content">
+          <div class="hero__identity">
+            <div class="brand-mark" aria-hidden="true">
+              <i class="fa-solid fa-headset"></i>
             </div>
 
-            <div class="legend">
-                <div class="legend-item">
-                    <span class="legend-color legend-nacional"></span>
-                    <span>Feriado Nacional</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-color legend-estadual"></span>
-                    <span>Feriado Estadual</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-color legend-municipal"></span>
-                    <span>Feriado Municipal</span>
-                </div>
-                <div class="legend-item">
-                    <span class="legend-color legend-comemorativo"></span>
-                    <span>Data Comemorativa</span>
-                </div>
+            <div>
+              <p class="eyebrow">
+                COPOM · Centro de Operações da Polícia Militar
+              </p>
+
+              <h1 id="pageTitle">Escala de Serviço das Equipes</h1>
             </div>
+          </div>
 
-            <section id="estatisticas" class="statistics-section">
-                <h3>Resumo do Mês</h3>
-                <div id="estatisticaContainer"></div>
-            </section>
-        </main>
+          <div class="hero__actions" aria-label="Preferências da interface">
+            <div class="live-date" id="liveDateLabel" aria-live="polite"></div>
 
-        <footer class="page-footer">
-            <p>Desenvolvido pela Equipe B</p>
-            <p>Atualizado em 21/11/2025</p>
-            <img src="https://hitwebcounter.com/counter/counter.php?page=21016690&amp;style=0006&amp;nbdigits=5&amp;type=page&amp;initCount=4530" title="Counter Widget" alt="Visit counter For Websites" border="0">
-        </footer>
-    </div>
-
-    <div id="specialDateModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="modal-close-btn" title="Fechar">&times;</button>
-            <span id="modalTypeChip" class="modal-chip"></span>
-            <h3 id="modalTitle"></h3>
-            <p id="modalSummary"></p>
-            <blockquote id="modalMotivation"></blockquote>
+            <button
+              type="button"
+              id="themeToggle"
+              class="theme-toggle-button"
+              aria-label="Ativar modo escuro"
+              aria-pressed="false"
+              title="Ativar modo escuro"
+            >
+              <span class="theme-toggle-button__icon" aria-hidden="true">
+                <i id="themeToggleIcon" class="fa-solid fa-moon"></i>
+              </span>
+            </button>
+          </div>
         </div>
-        <canvas id="fireworks-canvas"></canvas>
+
+        <p class="hero__description">
+          Painel operacional para consulta rápida dos plantões diurnos,
+          noturnos, feriados e datas relevantes.
+        </p>
+      </header>
+
+      <main class="main-content">
+        <section class="notice" aria-label="Dica de uso">
+          <div class="notice__icon" aria-hidden="true">
+            <i class="fa-solid fa-arrow-pointer"></i>
+          </div>
+
+          <p>
+            <strong>Dica:</strong> selecione uma ou mais equipes para
+            destacá-las no calendário.
+          </p>
+        </section>
+
+        <section class="team-panel" aria-labelledby="teamPanelTitle">
+          <div class="section-heading section-heading--sr">
+            <h2 id="teamPanelTitle">Equipes</h2>
+          </div>
+
+          <div
+            class="team-buttons"
+            id="teamButtons"
+            role="group"
+            aria-label="Filtro visual por equipe"
+          ></div>
+        </section>
+
+        <section class="calendar-card" aria-labelledby="currentMonthYear">
+          <nav class="calendar-toolbar" aria-label="Navegação do calendário">
+            <button
+              type="button"
+              id="prevMonth"
+              class="nav-control"
+              aria-label="Mês anterior"
+            >
+              <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+              <span id="prevMonthName">Mês anterior</span>
+            </button>
+
+            <div class="month-year-selector" aria-label="Selecionar mês e ano">
+              <label class="sr-only" for="monthSelect">Selecionar mês</label>
+              <select id="monthSelect"></select>
+
+              <label class="sr-only" for="yearSelect">Selecionar ano</label>
+              <select id="yearSelect"></select>
+            </div>
+
+            <button
+              type="button"
+              id="todayButton"
+              class="today-button"
+              aria-label="Ir para o mês atual"
+            >
+              <i class="fa-solid fa-calendar-day" aria-hidden="true"></i>
+              <span>Hoje</span>
+            </button>
+
+            <button
+              type="button"
+              id="nextMonth"
+              class="nav-control nav-control--next"
+              aria-label="Próximo mês"
+            >
+              <span id="nextMonthName">Próximo mês</span>
+              <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </button>
+          </nav>
+
+          <div class="calendar-sticky-header" id="stickyHeaderContainer">
+            <div class="current-month-header">
+              <p
+                class="calendar-status"
+                id="calendarStatus"
+                aria-live="polite"
+              ></p>
+
+              <h2 id="currentMonthYear"></h2>
+            </div>
+
+            <div class="calendar-grid-header" aria-hidden="true">
+              <div class="day-header">Dom</div>
+              <div class="day-header">Seg</div>
+              <div class="day-header">Ter</div>
+              <div class="day-header">Qua</div>
+              <div class="day-header">Qui</div>
+              <div class="day-header">Sex</div>
+              <div class="day-header">Sáb</div>
+            </div>
+          </div>
+
+          <div
+            class="calendar-grid"
+            id="calendarBody"
+            aria-label="Dias do calendário"
+          ></div>
+        </section>
+
+        <section
+          class="legend"
+          aria-label="Legenda de feriados e datas especiais"
+        >
+          <div class="legend-item">
+            <span class="legend-color legend-color--national"></span>
+            <span>Feriado Nacional</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-color legend-color--state"></span>
+            <span>Feriado Estadual</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-color legend-color--municipal"></span>
+            <span>Feriado Municipal</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-color legend-color--commemorative"></span>
+            <span>Data Comemorativa</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-color legend-color--payment"></span>
+            <span>Dia de Pagamento</span>
+          </div>
+        </section>
+
+        <section
+          id="estatisticas"
+          class="statistics-section"
+          aria-labelledby="statisticsTitle"
+        >
+          <div class="section-heading">
+            <p class="eyebrow">Distribuição operacional</p>
+            <h2 id="statisticsTitle">Resumo do Mês</h2>
+          </div>
+
+          <div id="estatisticaContainer" class="statistics-grid"></div>
+        </section>
+      </main>
+
+      <footer class="page-footer">
+        <p>N-DIT COPOM</p>
+        <p>Atualizado em 03/06/2026</p>
+        <img
+          src="https://hitwebcounter.com/counter/counter.php?page=21016690&amp;style=0006&amp;nbdigits=5&amp;type=page&amp;initCount=4530"
+          title="Counter Widget"
+          alt="Visit counter For Websites"
+          border="0"
+        />
+      </footer>
     </div>
 
-    <div id="paymentTooltip" class="payment-tooltip"></div>
+    <div id="specialDateModal" class="modal-overlay" aria-hidden="true">
+      <div
+        class="modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+        aria-describedby="modalSummary"
+        tabindex="-1"
+      >
+        <button
+          type="button"
+          class="modal-close-btn"
+          title="Fechar"
+          aria-label="Fechar janela"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
 
-    <script src="./js/specialDates.js"></script>
-    <script src="./js/main.js"></script>
-</body>
+        <span id="modalTypeChip" class="modal-chip"></span>
+        <h2 id="modalTitle"></h2>
+        <p id="modalSummary"></p>
+        <blockquote id="modalMotivation"></blockquote>
+      </div>
 
+      <canvas id="fireworksCanvas" aria-hidden="true"></canvas>
+    </div>
+
+    <div id="paymentTooltip" class="payment-tooltip" role="tooltip"></div>
+  </body>
 </html>
