@@ -1011,11 +1011,12 @@ html[data-theme="dark"] .current-month-header {
 
 .page-footer {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem 1.25rem;
-  flex-wrap: wrap;
+  gap: 0.35rem;
   margin-top: 2rem;
+  padding: 1.25rem 1rem 0;
   color: var(--text-muted);
   font-size: 0.88rem;
   font-weight: 600;
@@ -1024,6 +1025,16 @@ html[data-theme="dark"] .current-month-header {
 
 .page-footer p {
   margin: 0;
+  line-height: 1.4;
+}
+
+.page-footer img {
+  display: block;
+  margin-top: 0.45rem;
+  max-width: 100%;
+  height: auto;
+  border: 0;
+  opacity: 0.82;
 }
 
 .modal-overlay {
