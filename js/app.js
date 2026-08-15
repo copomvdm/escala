@@ -669,13 +669,15 @@
       state.currentDate.getFullYear() === range.end &&
       state.currentDate.getMonth() === 11;
 
-    const previousLabel = `${config.months[previousDate.getMonth()]} de ${previousDate.getFullYear()}`;
+    const previousMonthName = config.months[previousDate.getMonth()];
+    const nextMonthName = config.months[nextDate.getMonth()];
 
-    const nextLabel = `${config.months[nextDate.getMonth()]} de ${nextDate.getFullYear()}`;
+    const previousLabel = `${previousMonthName} de ${previousDate.getFullYear()}`;
 
-    setText(elements.prevMonthNameEl, previousLabel);
+    const nextLabel = `${nextMonthName} de ${nextDate.getFullYear()}`;
 
-    setText(elements.nextMonthNameEl, nextLabel);
+    setText(elements.prevMonthNameEl, previousMonthName);
+    setText(elements.nextMonthNameEl, nextMonthName);
 
     elements.prevMonthBtn.disabled = isAtStart;
 
@@ -687,12 +689,14 @@
 
     elements.prevMonthBtn.setAttribute(
       "aria-label",
-      isAtStart ? "Não há mês anterior disponível" : `Ir para ${previousLabel}`,
+      isAtStart
+        ? "Não há mês anterior disponível"
+        : `Voltar para ${previousLabel}`,
     );
 
     elements.nextMonthBtn.setAttribute(
       "aria-label",
-      isAtEnd ? "Não há próximo mês disponível" : `Ir para ${nextLabel}`,
+      isAtEnd ? "Não há próximo mês disponível" : `Avançar para ${nextLabel}`,
     );
   }
 

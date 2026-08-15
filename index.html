@@ -169,39 +169,25 @@
             ></div>
           </section>
 
-          <div
-            class="schedule-toolbar d-flex flex-column flex-md-row align-items-md-center justify-content-md-between gap-2 gap-md-3 mb-3"
+          <nav
+            class="schedule-toolbar mb-3"
+            aria-label="Navegação do calendário"
           >
-            <nav
-              class="schedule-toolbar__navigation d-flex align-items-center gap-2 order-2 order-md-1"
-              aria-label="Navegação do calendário"
+            <button
+              type="button"
+              id="prevMonth"
+              class="btn btn-outline-secondary calendar-month-nav calendar-month-nav--previous"
+              aria-label="Mês anterior"
             >
-              <button
-                type="button"
-                id="prevMonth"
-                class="btn btn-outline-secondary calendar-arrow-button"
-                aria-label="Mês anterior"
-              >
-                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+              <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
 
-                <span id="prevMonthName" class="visually-hidden">
-                  Mês anterior
-                </span>
-              </button>
+              <span>
+                <span class="calendar-month-nav__action">Voltar para</span>
+                <strong id="prevMonthName">mês anterior</strong>
+              </span>
+            </button>
 
-              <button
-                type="button"
-                id="nextMonth"
-                class="btn btn-outline-secondary calendar-arrow-button"
-                aria-label="Próximo mês"
-              >
-                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-
-                <span id="nextMonthName" class="visually-hidden">
-                  Próximo mês
-                </span>
-              </button>
-
+            <div class="schedule-toolbar__center">
               <button
                 type="button"
                 id="todayButton"
@@ -210,36 +196,48 @@
               >
                 Hoje
               </button>
-            </nav>
 
-            <div
-              class="quick-date-selectors d-flex align-items-center gap-2 order-1 order-md-2 flex-grow-1 justify-content-md-center"
-            >
-              <div class="quick-date-selector quick-date-selector--month">
-                <label class="visually-hidden" for="monthSelect">
-                  Selecionar mês
-                </label>
+              <div class="quick-date-selectors d-flex align-items-center gap-2">
+                <div class="quick-date-selector quick-date-selector--month">
+                  <label class="visually-hidden" for="monthSelect">
+                    Selecionar mês
+                  </label>
 
-                <select
-                  id="monthSelect"
-                  class="form-select calendar-select calendar-select--month"
-                  aria-label="Selecionar mês"
-                ></select>
-              </div>
+                  <select
+                    id="monthSelect"
+                    class="form-select calendar-select calendar-select--month"
+                    aria-label="Selecionar mês"
+                  ></select>
+                </div>
 
-              <div class="quick-date-selector quick-date-selector--year">
-                <label class="visually-hidden" for="yearSelect">
-                  Selecionar ano
-                </label>
+                <div class="quick-date-selector quick-date-selector--year">
+                  <label class="visually-hidden" for="yearSelect">
+                    Selecionar ano
+                  </label>
 
-                <select
-                  id="yearSelect"
-                  class="form-select calendar-select calendar-select--year"
-                  aria-label="Selecionar ano"
-                ></select>
+                  <select
+                    id="yearSelect"
+                    class="form-select calendar-select calendar-select--year"
+                    aria-label="Selecionar ano"
+                  ></select>
+                </div>
               </div>
             </div>
-          </div>
+
+            <button
+              type="button"
+              id="nextMonth"
+              class="btn btn-outline-secondary calendar-month-nav calendar-month-nav--next"
+              aria-label="Próximo mês"
+            >
+              <span>
+                <span class="calendar-month-nav__action">Avançar para</span>
+                <strong id="nextMonthName">próximo mês</strong>
+              </span>
+
+              <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            </button>
+          </nav>
 
           <section
             class="calendar-card border rounded-4 overflow-hidden"
